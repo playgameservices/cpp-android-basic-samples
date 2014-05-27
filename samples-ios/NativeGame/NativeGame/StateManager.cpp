@@ -29,7 +29,7 @@ const int32_t BUFFER_SIZE = 256;
     CFRelease(str);\
     }
 #else
-#include "android/Log.h"
+#include "android/log.h"
 #define DEBUG_TAG "TeapotNativeActivity"
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, DEBUG_TAG, __VA_ARGS__))
 
