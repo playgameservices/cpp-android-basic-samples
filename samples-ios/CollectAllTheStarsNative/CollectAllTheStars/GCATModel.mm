@@ -81,6 +81,7 @@
   }
   
   self.screenViewController->service_->Snapshots().Open(fileName,
+                                                        gpg::SnapshotConflictPolicy::MANUAL,
                                                         [self, snapshotImage, handler](gpg::SnapshotManager::OpenResponse const & response) {
                                                           if (IsSuccess(response.status)) {
                                                             gpg::SnapshotMetadata metadata = response.data;
@@ -115,6 +116,7 @@
     return;
   }
   self.screenViewController->service_->Snapshots().Open(_currentSnapshot.FileName(),
+                                                        gpg::SnapshotConflictPolicy::MANUAL,
                                                         [self, handler](gpg::SnapshotManager::OpenResponse const & response) {
                                                           if (IsSuccess(response.status)) {
                                                             gpg::SnapshotMetadata metadata = response.data;
@@ -165,17 +167,11 @@
   gpg::SnapshotMetadataChange metadata_change =
   builder.SetDescription("CollectAllTheStar savedata ").Create();
   
-  //Convert NSData to stl::vector
-  NSData* data = [self.inventory getCloudSaveData];
-  std::vector<uint8_t> v;
-  v.assign(reinterpret_cast<const uint8_t*>([data bytes]),
-           reinterpret_cast<const uint8_t*>([data bytes]) + [data length]);
-  
+  //For now, we would just choose the newest version of snapshot
   gpg::SnapshotManager::CommitResponse commitResponse =
   self.screenViewController->service_->Snapshots().ResolveConflictBlocking(final,
                                                                            metadata_change,
-                                                                           conflictId,
-                                                                           v);
+                                                                           conflictId);
   if (IsSuccess(commitResponse.status)) {
     NSLog(@"Conflict resolution succeeded");
     [self readCurrentSnapshot];

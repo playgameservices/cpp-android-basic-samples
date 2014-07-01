@@ -95,41 +95,55 @@ public class NDKHelper {
                 true);
     }
 
-    public boolean loadTexture(String path) {
-        Bitmap bitmap = null;
-        try {
-            String str = path;
-            if (!path.startsWith("/")) {
-                str = "/" + path;
-            }
-
-            File file = new File(activity.getExternalFilesDir(null), str);
-            if (file.canRead()) {
-                bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-            } else {
-                bitmap = BitmapFactory.decodeStream(activity.getResources()
-                        .getAssets().open(path));
-            }
-            // Matrix matrix = new Matrix();
-            // // resize the bit map
-            // matrix.postScale(-1F, 1F);
-            //
-            // // recreate the new Bitmap and set it back
-            // bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
-            // bitmap.getHeight(), matrix, true);
-
-        } catch (Exception e) {
-            Log.w("NDKHelper", "Coundn't load a file:" + path);
-            return false;
-        }
-
-        if (bitmap != null) {
-            GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
-        }
-        return true;
-
+  public class TextureInformation {
+    boolean ret;
+    boolean alphaChannel;
+    int originalWidth;
+    int originalHeight;
+  }
+  
+  public Object loadTexture(String path) {
+    Bitmap bitmap = null;
+    TextureInformation info = new TextureInformation();
+    try {
+      String str = path;
+      if (!path.startsWith("/")) {
+        str = "/" + path;
+      }
+      
+      File file = new File(activity.getExternalFilesDir(null), str);
+      if (file.canRead()) {
+        bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
+      } else {
+        bitmap = BitmapFactory.decodeStream(activity.getResources()
+                                            .getAssets().open(path));
+      }
+      // Matrix matrix = new Matrix();
+      // // resize the bit map
+      // matrix.postScale(-1F, 1F);
+      //
+      // // recreate the new Bitmap and set it back
+      // bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+      // bitmap.getHeight(), matrix, true);
+      
+    } catch (Exception e) {
+      Log.w("NDKHelper", "Coundn't load a file:" + path);
+      info.ret = false;
+      return info;
     }
-
+    
+    if (bitmap != null) {
+      GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+    }
+    info.ret = true;
+    info.alphaChannel = bitmap.hasAlpha();
+    info.originalWidth = getBitmapWidth(bitmap);
+    info.originalHeight = getBitmapHeight(bitmap);
+    
+    return info;
+    
+  }
+  
     public Bitmap openBitmap(String path, boolean iScalePOT) {
         Bitmap bitmap = null;
         try {
