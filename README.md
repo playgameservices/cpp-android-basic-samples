@@ -46,3 +46,7 @@ Unzip the archive you download into ./gpg-cpp-sdk directory.
 Then follow the instructions you can find here:
 
 [https://developers.google.com/games/services/cpp/GettingStartedNativeClient](https://developers.google.com/games/services/cpp/GettingStartedNativeClient)
+
+<h2>Acknowledgement</h2>
+Some of samples are using OpenSource projects below,
+JASONCPP: https://github.com/open-source-parsers/jsoncpp
