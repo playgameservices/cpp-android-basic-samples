@@ -18,4 +18,4 @@
 //
 
 // We can also add our ClientID here
-#define CLIENT_ID "REPLACE_TO_YOUR_OWN_ID";
+#define CLIENT_ID "REPLACE_TO_YOUR_OWN_ID"

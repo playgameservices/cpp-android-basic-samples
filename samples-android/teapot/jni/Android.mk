@@ -28,7 +28,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/.. $(LOCAL_PATH)/NDKHelper/ $(LOCAL_PATH)/Java
 LOCAL_CFLAGS :=
 
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv2 -lz
-LOCAL_STATIC_LIBRARIES := cpufeatures android_native_app_glue ndk_helper
+LOCAL_STATIC_LIBRARIES := cpufeatures android_native_app_glue ndk_helper gpg-1
 
 ifneq ($(filter %armeabi-v7a,$(TARGET_ARCH_ABI)),)
 LOCAL_CFLAGS += -mhard-float -D_NDK_MATH_NO_SOFTFP=1
@@ -38,12 +38,14 @@ LOCAL_LDFLAGS += -Wl,--no-warn-mismatch
 endif
 endif
 
-LOCAL_LDFLAGS += -L$(LOCAL_PATH)/../../../gpg-cpp-sdk/android/lib/$(TARGET_ARCH_ABI) -lgpg
+LOCAL_LDFLAGS += -L$(LOCAL_PATH)/../../../gpg-cpp-sdk/android/lib/$(TARGET_ARCH_ABI)
 LOCAL_LDFLAGS += -L$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.8/libs/$(TARGET_ARCH_ABI) -lgnustl_static
 
 
 include $(BUILD_SHARED_LIBRARY)
 
+$(call import-add-path,$(LOCAL_PATH)/../../..)
+$(call import-module,gpg-cpp-sdk/android)
 $(call import-module,android/native_app_glue)
 $(call import-module,android/cpufeatures)
 
