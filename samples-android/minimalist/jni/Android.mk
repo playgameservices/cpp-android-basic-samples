@@ -16,17 +16,14 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/.. $(LOCAL_PATH)/../../../gpg-cpp-sdk/android/include
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/.. $(NDK_MODULE_PATH)/gpg-cpp-sdk/android/include
 
 LOCAL_MODULE    := native-activity
 LOCAL_SRC_FILES := main.cpp StateManager.cpp
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -lz
-LOCAL_LDFLAGS += -L$(LOCAL_PATH)/../../../gpg-cpp-sdk/android/lib/$(TARGET_ARCH_ABI)
-LOCAL_LDFLAGS += -L$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.8/libs/$(TARGET_ARCH_ABI) -lgnustl_static
-LOCAL_STATIC_LIBRARIES := android_native_app_glue gpg-1
+LOCAL_STATIC_LIBRARIES := android_native_app_glue gpg-1 gnustl-static
 
 include $(BUILD_SHARED_LIBRARY)
 
-$(call import-add-path,$(LOCAL_PATH)/../../..)
 $(call import-module,gpg-cpp-sdk/android)
 $(call import-module,android/native_app_glue)

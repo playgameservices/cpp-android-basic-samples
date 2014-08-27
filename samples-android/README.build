@@ -1,0 +1,11 @@
+Use build.sh to recursively build all samples.
+
+The build script depends on the following environment variables to be set:
+ANDROID_HOME to the path where the Android SDK is installed
+NDK_ROOT to the path where the Android NDK is installed
+NDK_MODULE_PATH to the location of the Play Games cpp libraries.
+
+Note: NDK_MODULE_PATH should point one directory *above* where
+you've installed gpg-cpp-sdk. This variable is used by ndk-build to locate
+all installed modules, not just the Google Play Games library.
+

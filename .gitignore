@@ -1,0 +1,7 @@
+bin/
+build.xml
+gen/
+libs/
+local.properties
+obj/
+.settings/
