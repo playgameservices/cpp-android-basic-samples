@@ -120,13 +120,15 @@ void StateManager::InitServices(
         .SetLogging(gpg::DEFAULT_ON_LOG, gpg::LogLevel::VERBOSE)
         .SetOnAuthActionStarted([started_callback](gpg::AuthOperation op) {
           is_auth_in_progress_ = true;
-          started_callback(op);
+          if (started_callback != nullptr)
+            started_callback(op);
         })
         .SetOnAuthActionFinished([finished_callback](gpg::AuthOperation op,
                                                      gpg::AuthStatus status) {
           LOGI("Sign in finished with a result of %d", status);
           is_auth_in_progress_ = false;
-          finished_callback(op, status);
+          if (finished_callback != nullptr)
+            finished_callback(op, status);
           LOGI("Fetching all blocking");
           gpg::AchievementManager::FetchAllResponse fetchResponse = game_services_->Achievements().FetchAllBlocking(std::chrono::milliseconds(1000));
           LOGI("--------------------------------------------------------------");
