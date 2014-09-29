@@ -9,6 +9,7 @@ declare targets=(           \
   TbmpSkeletonNative        \
   teapot                    \
   TrivialQuestNative        \
+  ButtonClicker             \
 )
 
 declare -r script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
