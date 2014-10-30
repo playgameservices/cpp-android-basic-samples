@@ -86,6 +86,8 @@ void Engine::InitGooglePlayGameServices() {
                          PlayGame();
                        }
                      });
+               } else {
+                 LeaveGame();
                }
              } else {
                // Otherwise, show default inbox and let players to accept an
