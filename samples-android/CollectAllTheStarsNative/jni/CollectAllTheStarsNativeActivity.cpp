@@ -194,7 +194,7 @@ Engine::ResolveConflicts(gpg::SnapshotManager::OpenResponse const &openResponse,
   //
   gpg::SnapshotManager &manager = service_->Snapshots();
   gpg::SnapshotManager::OpenResponse responseBase =
-      manager.OpenBlocking(openResponse.conflict_base.FileName(),
+      manager.OpenBlocking(openResponse.conflict_original.FileName(),
                            gpg::SnapshotConflictPolicy::MANUAL);
   gpg::SnapshotManager::ReadResponse responseReadBase =
       manager.ReadBlocking(responseBase.data);
@@ -208,7 +208,7 @@ Engine::ResolveConflicts(gpg::SnapshotManager::OpenResponse const &openResponse,
     }
 
   gpg::SnapshotManager::OpenResponse responseRemote =
-      manager.OpenBlocking(openResponse.conflict_remote.FileName(),
+      manager.OpenBlocking(openResponse.conflict_unmerged.FileName(),
                            gpg::SnapshotConflictPolicy::MANUAL);
   gpg::SnapshotManager::ReadResponse responseReadRemote =
       manager.ReadBlocking(responseRemote.data);
