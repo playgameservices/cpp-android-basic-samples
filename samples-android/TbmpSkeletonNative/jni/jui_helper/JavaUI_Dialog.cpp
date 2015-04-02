@@ -90,7 +90,7 @@ void JUIDialog::CreateDialog() {
 
   //Notify 'id' to JNI side
   ndk_helper::JNIHelper::GetInstance()->CallVoidMethod(obj_, "setID", "(I)V",
-                                                       (int32_t) this);
+                                                       id_factory_.getId(this));
   env->DeleteLocalRef(obj);
 }
 
@@ -319,7 +319,7 @@ void JUIAlertDialog::CreateDialog() {
 
   //Notify 'id' to JNI side
   ndk_helper::JNIHelper::GetInstance()->CallVoidMethod(obj_, "setID", "(I)V",
-                                                       (int32_t) this);
+                                                       id_factory_.getId(this));
   env->DeleteLocalRef(obj);
 }
 

@@ -186,7 +186,6 @@ int32_t Engine::HandleInput(android_app *app, AInputEvent *event) {
  */
 void Engine::HandleCmd(struct android_app *app, int32_t cmd) {
   Engine *eng = (Engine *)app->userData;
-  LOGI("message %d", cmd);
   switch (cmd) {
   case APP_CMD_SAVE_STATE:
     break;
