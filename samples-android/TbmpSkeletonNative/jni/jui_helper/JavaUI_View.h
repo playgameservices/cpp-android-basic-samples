@@ -204,13 +204,32 @@ struct AttributeType {
 };
 
 /*
+ * class IdFactory: cache UI pointers and generate an ID, send ID to Java side
+ *                  when get id back from Java, retrieve the UI pointer for that
+ *                  ID, and continue. Mainly purpose is for things to be called
+ *                  back on UI thread
+ */
+class JUIBase;
+class IdFactory {
+   public:
+      int32_t   getId(const JUIBase* ui_object);
+      JUIBase*  getUIBase(int32_t ui_id);
+      void      debugDumpCurrentHashTable(void);
+      bool      insert(const JUIBase* ui_object);
+      bool      remove(const JUIBase* ui_object);
+
+   private:
+      std::unordered_map<const JUIBase*, int32_t> ids_;
+      static int32_t cur_id_;
+};
+
+/*
  * Base class of JUIView
  */
 class JUIBase {
 public:
-  JUIBase() : obj_(NULL) {}
-
-  virtual ~JUIBase() {}
+  JUIBase() : obj_(NULL) {  id_factory_.insert(this); }
+  virtual ~JUIBase() {  id_factory_.remove(this); }
 
   /*
    * Dispatch Widget events. This one is called from Java code through
@@ -423,6 +442,8 @@ public:
     value = ret;
     return true;
   }
+
+  static IdFactory id_factory_;
 
 protected:
   std::unordered_map<std::string, AttributeParameterStore>
