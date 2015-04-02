@@ -24,6 +24,7 @@ namespace jui_helper {
 JUIWindow::JUIWindow()
     : activity_(NULL), suspended_(false), windowDestroyed_(false),
       jni_helper_java_ref_(NULL), jni_helper_java_class_(NULL), dialog_(NULL) {
+  JUIBase::id_factory_.insert(reinterpret_cast<const JUIBase*>(this));
   views_.clear();
 }
 
@@ -33,6 +34,8 @@ JUIWindow::~JUIWindow() {
 
   env->DeleteGlobalRef(jni_helper_java_ref_);
   env->DeleteGlobalRef(jni_helper_java_class_);
+
+  JUIBase::id_factory_.remove(reinterpret_cast<const JUIBase *>(this));
 
 }
 
@@ -251,8 +254,7 @@ jobject JUIWindow::CreateWidget(const char *strWidgetName, void *id) {
     }
   }
 
-  jobject obj =
-      env->CallObjectMethod(jni_helper_java_ref_, mid, name, (int32_t) id);
+  jobject obj = env->CallObjectMethod(jni_helper_java_ref_, mid, name, JUIBase::id_factory_.getId(reinterpret_cast<const JUIBase*>(id)));
   jobject objGlobal = env->NewGlobalRef(obj);
   env->DeleteLocalRef(name);
   env->DeleteLocalRef(obj);
@@ -283,9 +285,9 @@ jobject JUIWindow::CreateWidget(const char *strWidgetName, void *id,
       return NULL;
     }
   }
-
   jobject obj = env->CallObjectMethod(jni_helper_java_ref_, mid, name,
-                                      (int32_t) id, (int32_t) param);
+                                      JUIBase::id_factory_.getId(reinterpret_cast<const JUIBase*>(id)), (int32_t) param);
+
   jobject objGlobal = env->NewGlobalRef(obj);
   env->DeleteLocalRef(name);
   env->DeleteLocalRef(objGlobal);

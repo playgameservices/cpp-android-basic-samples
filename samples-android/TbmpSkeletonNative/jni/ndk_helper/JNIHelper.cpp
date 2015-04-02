@@ -596,7 +596,7 @@ void JNIHelper::RunOnUiThread(std::function<void()> callback) {
 // This JNI function is invoked from UIThread asynchronously
 extern "C" {
 JNIEXPORT void
-Java_com_sample_helper_NDKHelper_RunOnUiThreadHandler(JNIEnv *env,
+Java_com_sample_helper_NDKHelper_RunOnUiThreadHandler(JNIEnv *env, jobject thiz,
                                                       int64_t pointer) {
   std::function<void()> *pCallback = (std::function<void()> *)pointer;
   (*pCallback)();
