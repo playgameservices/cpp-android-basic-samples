@@ -35,7 +35,7 @@
 #include "gpg/gpg.h"
 
 // For JSON parser
-#include "external/jsoncpp/include/json/json.h"
+#include "json/json.h"
 
 #include "TeapotRenderer.h"
 #include "NDKHelper.h"

@@ -6,11 +6,11 @@ LOCAL_MODULE := CollectAllTheStarsNativeActivity
 LOCAL_SRC_FILES := CollectAllTheStarsNativeActivity.cpp \
  CollectAllTheStarsNativeActivity_Engine.cpp \
  TeapotRenderer.cpp \
- external/jsoncpp/src/lib_json/json_writer.cpp \
- external/jsoncpp/src/lib_json/json_reader.cpp \
- external/jsoncpp/src/lib_json/json_value.cpp
+ ../../Common/external/jsoncpp/src/lib_json/json_writer.cpp \
+ ../../Common/external/jsoncpp/src/lib_json/json_reader.cpp \
+ ../../Common/external/jsoncpp/src/lib_json/json_value.cpp
  
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/.. $(LOCAL_PATH)/ndk_helper/ $(LOCAL_PATH)/jui_helper/ $(LOCAL_PATH)/external/jsoncpp/include/
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Common/external/jsoncpp/include/
 LOCAL_CFLAGS :=
 LOCAL_CPPFLAGS := -std=c++11 -Wall
 
@@ -31,8 +31,7 @@ endif
 
 include $(BUILD_SHARED_LIBRARY)
 
-$(call import-add-path,$(LOCAL_PATH)/../../..)
-$(call import-add-path,$(LOCAL_PATH))
+$(call import-add-path,$(LOCAL_PATH)/../../Common)
 $(call import-module,ndk_helper)
 $(call import-module,jui_helper)
 $(call import-module,gpg-cpp-sdk/android)

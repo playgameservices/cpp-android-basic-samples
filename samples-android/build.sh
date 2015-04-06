@@ -5,9 +5,9 @@ set -eua
 # this script's path.
 declare targets=(           \
   CollectAllTheStarsNative  \
-  minimalist                \
+  Minimalist                \
   TbmpSkeletonNative        \
-  teapot                    \
+  Teapot                    \
   TrivialQuestNative        \
   ButtonClicker             \
 )

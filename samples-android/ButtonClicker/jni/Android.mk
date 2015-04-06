@@ -7,7 +7,6 @@ LOCAL_SRC_FILES := ButtonClickerNativeActivity.cpp \
  ButtonClickerNativeActivity_Engine.cpp \
  TeapotRenderer.cpp
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/.. $(LOCAL_PATH)/ndk_helper/ $(LOCAL_PATH)/jui_helper/ $(LOCAL_PATH)/external/jsoncpp/include/
 LOCAL_CFLAGS :=
 LOCAL_CPPFLAGS := -std=c++11
 
@@ -28,8 +27,7 @@ endif
 
 include $(BUILD_SHARED_LIBRARY)
 
-$(call import-add-path,$(LOCAL_PATH)/../../..)
-$(call import-add-path,$(LOCAL_PATH))
+$(call import-add-path,$(LOCAL_PATH)/../../Common)
 $(call import-module,ndk_helper)
 $(call import-module,jui_helper)
 $(call import-module,gpg-cpp-sdk/android)
