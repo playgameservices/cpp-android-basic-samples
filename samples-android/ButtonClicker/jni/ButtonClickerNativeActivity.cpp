@@ -561,7 +561,15 @@ void Engine::LeaveGame() {
  */
 void Engine::InitUI() {
   // Show toast with app label
+
+  // The window initialization
+  jui_helper::JUIWindow::Init(app_->activity, JUIHELPER_CLASS_NAME);
+
   ndk_helper::JNIHelper::GetInstance()->RunOnUiThread([]() {
+    if(NULL == jui_helper::JUIWindow::GetInstance()->GetContext()) {
+	LOGE("====JUIWindow::Context is NULL, not showing Toast");
+        return;
+    }
     jui_helper::JUIToast toast(
         ndk_helper::JNIHelper::GetInstance()->GetAppLabel());
     toast.Show();
@@ -573,7 +581,7 @@ void Engine::InitUI() {
   //
 
   // The window initialization
-  jui_helper::JUIWindow::Init(app_->activity, JUIHELPER_CLASS_NAME);
+  //  jui_helper::JUIWindow::Init(app_->activity, JUIHELPER_CLASS_NAME);
 
   //
   // Buttons
