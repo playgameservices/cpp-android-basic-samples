@@ -109,10 +109,8 @@ void Engine::OnAuthActionStarted(gpg::AuthOperation op) {
   ndk_helper::JNIHelper::GetInstance()->RunOnUiThread([this, op]() {
     EnableUI(false);
     if (op == gpg::AuthOperation::SIGN_IN) {
-      LOGI("Signing in to GPG");
       status_text_->SetAttribute("Text", "Signing In...");
     } else {
-      LOGI("Signing out from GPG");
       status_text_->SetAttribute("Text", "Signing Out...");
     }
   });
@@ -586,7 +584,6 @@ void Engine::InitUI() {
                            jui_helper::LAYOUT_PARAMETER_TRUE);
   button_sign_in_->SetCallback([this](jui_helper::JUIView *view,
                                       const int32_t message) {
-    LOGI("button_sign_in_ click: %d", message);
     if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
       if (service_->IsAuthorized()) {
         service_->SignOut();
@@ -668,7 +665,6 @@ void Engine::SetParameters(jui_helper::JUIButton *button,
  * Enable/Disable management UI
  */
 void Engine::EnableUI(bool enable) {
-  LOGI("Updating UI:%d", enable);
   ndk_helper::JNIHelper::GetInstance()->RunOnUiThread([this, enable]() {
     button_sign_in_->SetAttribute("Enabled", enable);
 
