@@ -106,6 +106,8 @@ void Engine::InitGooglePlayGameServices() {
  */
 void Engine::OnAuthActionStarted(gpg::AuthOperation op) {
   startup_mutex_.lock();
+  if (!initialized_resources_) return;
+
   ndk_helper::JNIHelper::GetInstance()->RunOnUiThread([this, op]() {
     EnableUI(false);
     if (op == gpg::AuthOperation::SIGN_IN) {
@@ -132,7 +134,11 @@ void Engine::OnAuthActionFinished(gpg::AuthOperation op,
       }
     });
   }
-
+  
+  if (!initialized_resources_) {
+    startup_mutex_.unlock();
+    return;
+  }
   ndk_helper::JNIHelper::GetInstance()->RunOnUiThread([this, status]() {
     EnableUI(true);
     button_sign_in_->SetAttribute(
