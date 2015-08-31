@@ -23,7 +23,6 @@
 Engine::Engine()
     : initialized_resources_(false),
       has_focus_(false),
-      authorizing_(false),
       app_(nullptr),
       dialog_(nullptr),
       textViewFPS_(nullptr),
@@ -61,14 +60,12 @@ void Engine::UnloadResources() { renderer_.Unload(); }
  */
 int Engine::InitDisplay(const int32_t cmd) {
   if (!initialized_resources_) {
-    while(authorizing_) {
-      std::chrono::milliseconds d(100);
-      std::this_thread::sleep_for(d);
-    }
+    startup_mutex_.lock();
     gl_context_->Init(app_->window);
     InitUI();
     LoadResources();
     initialized_resources_ = true;
+    startup_mutex_.unlock();
   } else {
     // initialize OpenGL ES and EGL
     if (EGL_SUCCESS != gl_context_->Resume(app_->window)) {

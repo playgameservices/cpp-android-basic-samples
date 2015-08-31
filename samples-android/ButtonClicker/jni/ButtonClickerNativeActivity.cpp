@@ -105,10 +105,9 @@ void Engine::InitGooglePlayGameServices() {
  *
  */
 void Engine::OnAuthActionStarted(gpg::AuthOperation op) {
-  if (!initialized_resources_) return;
+  startup_mutex_.lock();
   ndk_helper::JNIHelper::GetInstance()->RunOnUiThread([this, op]() {
     EnableUI(false);
-    authorizing_ = true;
     if (op == gpg::AuthOperation::SIGN_IN) {
       LOGI("Signing in to GPG");
       status_text_->SetAttribute("Text", "Signing In...");
@@ -136,16 +135,14 @@ void Engine::OnAuthActionFinished(gpg::AuthOperation op,
     });
   }
 
-  if (!initialized_resources_) return;
-
   ndk_helper::JNIHelper::GetInstance()->RunOnUiThread([this, status]() {
     EnableUI(true);
-    authorizing_ = false;
     button_sign_in_->SetAttribute(
         "Text", gpg::IsSuccess(status) ? "Sign Out" : "Sign In");
 
     status_text_->SetAttribute(
         "Text", gpg::IsSuccess(status) ? "Signed In" : "Signed Out");
+    startup_mutex_.unlock();
   });
 }
 
@@ -560,14 +557,12 @@ void Engine::LeaveGame() {
  * invoking jui_helper functions to create java UIs
  */
 void Engine::InitUI() {
-  // Show toast with app label
-
   // The window initialization
   jui_helper::JUIWindow::Init(app_->activity, JUIHELPER_CLASS_NAME);
 
+  // Show toast with app label
   ndk_helper::JNIHelper::GetInstance()->RunOnUiThread([]() {
     if(NULL == jui_helper::JUIWindow::GetInstance()->GetContext()) {
-	LOGE("====JUIWindow::Context is NULL, not showing Toast");
         return;
     }
     jui_helper::JUIToast toast(
@@ -579,9 +574,6 @@ void Engine::InitUI() {
   // Using jui_helper, a support library, to create and bind game management
   // UIs.
   //
-
-  // The window initialization
-  //  jui_helper::JUIWindow::Init(app_->activity, JUIHELPER_CLASS_NAME);
 
   //
   // Buttons
@@ -655,7 +647,6 @@ void Engine::InitUI() {
   // Init play game services
   InitGooglePlayGameServices();
 
-  if (authorizing_) EnableUI(false);
   return;
 }
 
