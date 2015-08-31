@@ -61,6 +61,10 @@ void Engine::UnloadResources() { renderer_.Unload(); }
  */
 int Engine::InitDisplay(const int32_t cmd) {
   if (!initialized_resources_) {
+    while(authorizing_) {
+      std::chrono::milliseconds d(100);
+      std::this_thread::sleep_for(d);
+    }
     gl_context_->Init(app_->window);
     InitUI();
     LoadResources();
@@ -296,15 +300,6 @@ void android_main(android_app *state) {
   // Init play game services
   g_engine.InitGooglePlayGameServices();
 
-    //let's wait here...
-  {
-    int count = 50;
-    while(count--) {
-      std::chrono::milliseconds d(100);
-      std::this_thread::sleep_for(d);
-    }
-    LOGI("=====Spin Waiting done for gpg service");
-  }
   state->userData = &g_engine;
   state->onAppCmd = Engine::HandleCmd;
   state->onInputEvent = Engine::HandleInput;
