@@ -4,11 +4,11 @@ set -eua
 # List of targets to build. Interpreted as directories relative to
 # this script's path.
 declare targets=(           \
-  CollectAllTheStarsNative  \
-  Minimalist                \
-  TbmpSkeletonNative        \
-  Teapot                    \
-  TrivialQuestNative        \
+#  CollectAllTheStarsNative  \
+#  Minimalist                \
+#  TbmpSkeletonNative        \
+#  Teapot                    \
+#  TrivialQuestNative        \
   ButtonClicker             \
 )
 
