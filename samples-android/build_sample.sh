@@ -104,7 +104,7 @@ trap cleanup EXIT
 # Copy the lib project and run "android update lib-project" on it.
 # This requires a target, which apparently needs to be android-10.
 cp -r ${lib_project} ${private_lib}
-${android_tool} update lib-project --path ${private_lib} --target android-10
+${android_tool} update lib-project --path ${private_lib} --target android-22
 
 #
 # At last, build!

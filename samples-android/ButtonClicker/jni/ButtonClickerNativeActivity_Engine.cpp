@@ -23,7 +23,6 @@
 Engine::Engine()
     : initialized_resources_(false),
       has_focus_(false),
-      authorizing_(false),
       app_(nullptr),
       dialog_(nullptr),
       textViewFPS_(nullptr),
@@ -61,10 +60,12 @@ void Engine::UnloadResources() { renderer_.Unload(); }
  */
 int Engine::InitDisplay(const int32_t cmd) {
   if (!initialized_resources_) {
+    startup_mutex_.lock();
     gl_context_->Init(app_->window);
     InitUI();
     LoadResources();
     initialized_resources_ = true;
+    startup_mutex_.unlock();
   } else {
     // initialize OpenGL ES and EGL
     if (EGL_SUCCESS != gl_context_->Resume(app_->window)) {
@@ -192,7 +193,6 @@ int32_t Engine::HandleInput(android_app *app, AInputEvent *event) {
  */
 void Engine::HandleCmd(struct android_app *app, int32_t cmd) {
   Engine *eng = (Engine *)app->userData;
-  LOGI("message %d", cmd);
   switch (cmd) {
     case APP_CMD_SAVE_STATE:
       break;
