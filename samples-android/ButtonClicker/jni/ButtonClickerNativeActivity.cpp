@@ -105,15 +105,14 @@ void Engine::InitGooglePlayGameServices() {
  *
  */
 void Engine::OnAuthActionStarted(gpg::AuthOperation op) {
+  startup_mutex_.lock();
   if (!initialized_resources_) return;
+
   ndk_helper::JNIHelper::GetInstance()->RunOnUiThread([this, op]() {
     EnableUI(false);
-    authorizing_ = true;
     if (op == gpg::AuthOperation::SIGN_IN) {
-      LOGI("Signing in to GPG");
       status_text_->SetAttribute("Text", "Signing In...");
     } else {
-      LOGI("Signing out from GPG");
       status_text_->SetAttribute("Text", "Signing Out...");
     }
   });
@@ -135,17 +134,19 @@ void Engine::OnAuthActionFinished(gpg::AuthOperation op,
       }
     });
   }
-
-  if (!initialized_resources_) return;
-
+  
+  if (!initialized_resources_) {
+    startup_mutex_.unlock();
+    return;
+  }
   ndk_helper::JNIHelper::GetInstance()->RunOnUiThread([this, status]() {
     EnableUI(true);
-    authorizing_ = false;
     button_sign_in_->SetAttribute(
         "Text", gpg::IsSuccess(status) ? "Sign Out" : "Sign In");
 
     status_text_->SetAttribute(
         "Text", gpg::IsSuccess(status) ? "Signed In" : "Signed Out");
+    startup_mutex_.unlock();
   });
 }
 
@@ -560,8 +561,14 @@ void Engine::LeaveGame() {
  * invoking jui_helper functions to create java UIs
  */
 void Engine::InitUI() {
+  // The window initialization
+  jui_helper::JUIWindow::Init(app_->activity, JUIHELPER_CLASS_NAME);
+
   // Show toast with app label
   ndk_helper::JNIHelper::GetInstance()->RunOnUiThread([]() {
+    if(NULL == jui_helper::JUIWindow::GetInstance()->GetContext()) {
+        return;
+    }
     jui_helper::JUIToast toast(
         ndk_helper::JNIHelper::GetInstance()->GetAppLabel());
     toast.Show();
@@ -571,9 +578,6 @@ void Engine::InitUI() {
   // Using jui_helper, a support library, to create and bind game management
   // UIs.
   //
-
-  // The window initialization
-  jui_helper::JUIWindow::Init(app_->activity, JUIHELPER_CLASS_NAME);
 
   //
   // Buttons
@@ -586,7 +590,6 @@ void Engine::InitUI() {
                            jui_helper::LAYOUT_PARAMETER_TRUE);
   button_sign_in_->SetCallback([this](jui_helper::JUIView *view,
                                       const int32_t message) {
-    LOGI("button_sign_in_ click: %d", message);
     if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
       if (service_->IsAuthorized()) {
         service_->SignOut();
@@ -647,7 +650,6 @@ void Engine::InitUI() {
   // Init play game services
   InitGooglePlayGameServices();
 
-  if (authorizing_) EnableUI(false);
   return;
 }
 
@@ -669,7 +671,6 @@ void Engine::SetParameters(jui_helper::JUIButton *button,
  * Enable/Disable management UI
  */
 void Engine::EnableUI(bool enable) {
-  LOGI("Updating UI:%d", enable);
   ndk_helper::JNIHelper::GetInstance()->RunOnUiThread([this, enable]() {
     button_sign_in_->SetAttribute("Enabled", enable);
 
