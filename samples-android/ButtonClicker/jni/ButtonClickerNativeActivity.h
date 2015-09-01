@@ -153,7 +153,6 @@ class Engine : public gpg::IRealTimeEventListener {
   // synchronization primitive to synchronize
   // UIThread, Timer thread and gpg callback thread
   mutable std::mutex mutex_;
-  mutable std::mutex startup_mutex_;
 
   // Renderer of a teapot
   TeapotRenderer renderer_;
