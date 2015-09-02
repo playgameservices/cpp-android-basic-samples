@@ -147,7 +147,6 @@ class Engine : public gpg::IRealTimeEventListener {
                             // in OnRoomStatusChanged()
   int32_t score_counter_;   // Score counter of local player
   bool playing_;            // Am I playing a game?
-  bool authorizing_;        // Am I signing in to gpg service?
   std::string self_id_;     // Local player's ID
   double start_time_;       // Game start time
 

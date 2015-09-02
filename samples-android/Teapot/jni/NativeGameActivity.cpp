@@ -112,15 +112,15 @@ Engine::~Engine() {
 }
 
 void Engine::InitUI() {
+  // The window is being shown, get it ready.
+  jui_helper::JUIWindow::Init(app_->activity, JUIHELPER_CLASS_NAME);
+
   // Show toast with app label
   ndk_helper::JNIHelper::GetInstance()->RunOnUiThread([]() {
     jui_helper::JUIToast toast(
       ndk_helper::JNIHelper::GetInstance()->GetAppLabel());
     toast.Show();
   });
-
-  // The window is being shown, get it ready.
-  jui_helper::JUIWindow::Init(app_->activity, JUIHELPER_CLASS_NAME);
 
   //
   // Buttons
@@ -472,6 +472,9 @@ void Engine::UpdateFPS(float fps) {
 }
 
 void Engine::OnAuthActionStarted(gpg::AuthOperation op) {
+  if (!initialized_resources_) {
+    return;
+  }
   ndk_helper::JNIHelper::GetInstance()->RunOnUiThread([this, op]() {
     if (status_text_) {
       if (op == gpg::AuthOperation::SIGN_IN) {
@@ -485,6 +488,10 @@ void Engine::OnAuthActionStarted(gpg::AuthOperation op) {
 
 void Engine::OnAuthActionFinished(gpg::AuthOperation op,
                                   gpg::AuthStatus status) {
+  if (!initialized_resources_) {
+    return;
+  }
+
   ndk_helper::JNIHelper::GetInstance()->RunOnUiThread([this, status]() {
     if (status == gpg::AuthStatus::VALID) {
       jui_helper::JUIToast toast("Signed In.");
