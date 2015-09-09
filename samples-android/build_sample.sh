@@ -13,16 +13,7 @@ echo Checking Environment... >&2
 # point to valid paths.
 #
 for varname in ${required_vars[@]}; do
-  if [[ ! -v ${varname} ]]; then
-    echo "PROBLEM: ${varname} not set" >&2
-    result=1
-  else
-    eval path=\$${varname}
-    if [[ ! -e "${path}" ]]; then
-      echo "PROBLEM: ${varname} (${path}) does not exist" >&2
-      result=1
-    fi
-  fi
+  echo "Check ${varname}"
 done
 
 [[ ${result} -ne 0 ]] && exit ${result}

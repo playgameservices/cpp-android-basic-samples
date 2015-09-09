@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 set -eua
 
-if (($BASH_VERSINFO < 4)); then
-  echo "Sorry, you need at least bash-4.0 to run this script." >&2
-  exit 1
-fi
-
 # List of targets to build. Interpreted as directories relative to
 # this script's path.
 declare targets=(           \
