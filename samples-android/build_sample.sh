@@ -71,6 +71,8 @@ declare -x mode=${1:-debug}
 declare -r android_tool="${ANDROID_HOME}/tools/android"
 declare -r ndk_build="${NDK_ROOT}/ndk-build"
 declare -r lib_project="${ANDROID_HOME}/${lib_rel_path}"
+declare -r android_support_v4="${ANDROID_HOME}/extras/android/support/v4/\
+android-support-v4.jar"
 
 >&2 echo Preparing projects...
 declare -r private_lib=".gpg-lib"
@@ -95,6 +97,9 @@ trap cleanup EXIT
 # Copy the lib project and run "android update lib-project" on it.
 # This requires a target, which apparently needs to be android-10.
 cp -r ${lib_project} ${private_lib}
+mkdir  -p libs
+cp -f ${android_support_v4} ./libs
+
 ${android_tool} update lib-project --path ${private_lib} --target android-22
 
 #
