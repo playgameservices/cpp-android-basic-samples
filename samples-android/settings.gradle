@@ -1,0 +1,20 @@
+include ':ButtonClicker',
+        ':CollectAllTheStars',
+        ':Minimalist',
+        ':TbmpSkeleton',
+        ':Teapot',
+        ':TrivialQuest',
+        ':cpufeatures',
+        ':native_app_glue',
+        ':gpg-sdk'
+
+project(':ButtonClicker').projectDir = new File(settingsDir, './ButtonClicker')
+project(':CollectAllTheStars').projectDir = new File(settingsDir, './CollectAllTheStarsNative')
+project(':Minimalist').projectDir = new File(settingsDir, './Minimalist')
+project(':TbmpSkeleton').projectDir = new File(settingsDir, 'TbmpSkeletonNative')
+project(':Teapot').projectDir = new File(settingsDir, 'Teapot')
+project(':TrivialQuest').projectDir = new File(settingsDir, 'TrivialQuestNative')
+
+project(':cpufeatures').projectDir = new File(settingsDir, './Common/cpufeatures')
+project(':native_app_glue').projectDir = new File(settingsDir, './Common/native_app_glue')
+project(':gpg-sdk').projectDir = new File(settingsDir, './Common/gpg-sdk')

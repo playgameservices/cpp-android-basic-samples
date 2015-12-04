@@ -1,0 +1,82 @@
+apply plugin: 'com.android.model.application'
+// Retrieve ndk path: ndk.dir MUST be set in file local.properties
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def ndkDir = properties.getProperty('ndk.dir')
+
+def gpg_cpp_path = file(project(':gpg-sdk').projectDir).absolutePath + "/gpg-cpp-sdk/android"
+
+// stlport configuration ["c++_static", "c++_shared", "gnustl_static", "gnustl_shared"]
+// used to set stl and location of libgpg.a
+def stlportType = "c++"
+def stllinkType = "static"
+
+model {
+    repositories {
+        libs(PrebuiltLibraries) {
+            gpg {
+                headers.srcDir "${gpg_cpp_path}/include"
+                // StaticLibraryBinary does not work, use SharedLibraryBinary for now
+                binaries.withType(SharedLibraryBinary) {
+                    sharedLibraryFile = file("${gpg_cpp_path}/lib/${stlportType}/${targetPlatform.getName()}/libgpg.a")
+                }
+            }
+        }
+    }
+
+    android {
+        compileSdkVersion = 22
+        buildToolsVersion = "23.0.1"
+
+        defaultConfig.with {
+            applicationId = "com.google.example.games.tq"
+            minSdkVersion.apiLevel = 11
+            targetSdkVersion.apiLevel = 22
+        }
+
+    }
+    android.sources {
+        main {
+            jni {
+                dependencies {
+                    library "gpg"
+                    project ":cpufeatures" linkage "static"
+                    project ":native_app_glue" linkage "static"
+                }
+                source {
+                    srcDir 'src/main/jni'
+                    srcDir '../Common/ndk_helper'
+                    srcDir '../Common/jui_helper'
+                }
+            }
+        }
+    }
+    android.ndk {
+        platformVersion = 11
+        moduleName = "TrivialQuestNativeActivity"
+        stl = "${stlportType}_${stllinkType}"
+        ldLibs.addAll(["atomic", "log", "android", "EGL", "GLESv2", "z"])
+        abiFilters.addAll(["armeabi", "armeabi-v7a", "x86", "arm64-v8a"])
+        cppFlags.addAll(["-std=c++11",
+                         "-I${file("../Common/ndk_helper")}".toString(),
+                         "-I${file("../Common/jui_helper")}".toString() ])
+    }
+    android.abis {
+        create("armeabi-v7a") {
+            cppFlags.addAll(["-mhard-float", "-D_NDK_MATH_NO_SOFTFP=1", "-mfloat-abi=hard"])
+            ldLibs.add("m_hard")
+            ldFlags.add("-Wl,--no-warn-mismatch")
+        }
+    }
+    android.buildTypes {
+        release {
+            minifyEnabled = false
+            proguardFiles.add(file('proguard-android.txt'))
+        }
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:22.1.0'
+    compile 'com.google.android.gms:play-services:8.3.0'
+}

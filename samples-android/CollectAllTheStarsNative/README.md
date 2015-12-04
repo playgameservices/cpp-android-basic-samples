@@ -17,35 +17,12 @@ CollectAllTheStarsNative: The sample demonstrates how to use Snapshot feature wi
 1. Enable  Turn-based multiplayer setting in Saved Games
    (see the ones that the sample needs in its res/values/ids.xml)
 
-<h3>Eclipse settings</h3>
-
-1. Start Eclipse
-1. Import the Google Play Services library project (available for download through the SDK manager):
-    1. Click **File | Import | Android | Existing Android Code into Workspace**
-    1. Select `SDK/extras/google/google_play_services/google_play_services_lib` (where `SDK` stands for the path where you installed your Android SDK)
-    1. Click **Finish**
-1. Import the sample
-1. Go into the project properties window for that project (right-click, **Properties**) and check that this project has a reference to the `google_play_services_lib` project.
-1. IMPORTANT: replace package name and jni functions in the project.
-   e.g. Change Java_com_google_example_games_catt3_CollectAllTheStarsNativeActivity_nativeOnActivityResult() function name to 
-		Java_YOUR_PACKAGE_NAME_CollectAllTheStarsNativeActivity_nativeOnActivityResult()
-
-Your project should now compile. However, don't run it yet, since you still need to adjust your game's IDs
-in order for the sample(s) to work.
-
-Now jump to the *Modify IDs, compile and run* section and continue to follow the instructions there.
-
 <h3>Modify IDs, compile and run</h3>
-
-To set up a sample:
-
-1. Change the package name from com.google.example.games.\* to your own package name
-   (the same one you registered in Developer Console!). To do that, open **AndroidManifest.xml** and put
-   your package name in the "package" attribute of the **manifest** tag. You will need to
-   fix some of the references (particularly to the generated R class) because of the package name
-   change. Ctrl+Shift+O in Eclipse (and Alt+Enter in Android Studio) should take care of most of the work.
-1. Modify res/values/strings.xml and place your IDs there, as given by the
-   Developer Console (create the leaderboards and achievements necessary for
+1. In Android Studio toolbar, select CollectAllTheStars confituration to be the active project
+1. In build.gradle(Module:collectAlltheStars), change applicationId to be your own package name
+   (the same one you registered in Developer Console!).
+1. Modify res/values/strings.xml and place your game ID there, as assigned by the
+   Play Developer Console (create the leaderboards and achievements necessary for
    the sample, if any). Remember that the App ID is only the *numerical* portion
    of your client ID, so use `123456789012` and not `123456789012.apps.gooogleusercontent.com`.
 1. Compile and run.

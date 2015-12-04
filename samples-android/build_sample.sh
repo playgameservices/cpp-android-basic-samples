@@ -106,7 +106,12 @@ ${android_tool} update lib-project --path ${private_lib} --target android-22
 # At last, build!
 #
 echo Building... >&2
-${ndk_build}
+${ndk_build} "$@"
 ant ${mode}
 
+if [ $# -gt 0 ] && [ "$1" = "clean" ]
+then
+  rm -fr obj libs
+  rm -f build.xml proguard-project.txt
+fi
 echo Done >&2

@@ -1,11 +1,78 @@
-Use build.sh to recursively build all samples.
+Android Google Play Games Native Samples
+=======================================
+A set of the sample to demonstrate how to use Google Play Games Native Interface on Android:
+- create gpg native object
+- manage leaderboard, achievement, event, and others
+- interact with game graphics
 
+Pre-requisites
+--------------
+1. change the applicationId inside each individual samples build.gradle to your own package name
+2. change app_id to your registered game ID, which was assigned to you by play game console
+
+Build with Android Studio
+-------------------------
+This project need Android Studio 1.5+ with ndk support
+1. Launch Android Studio.
+1. Open the sample project at cpp-android-basic-samples/samples-android
+1. Disable "Instant Run" from Settings-> Build Execution, Deployment -> Instant Run
+1. Select project gpg-sdk in Android Studio "project" pane, unzip_gpg_sdk build task [in toolbar]
+1. Run the selected build task of "samples-android:Common:gpg-sdk [unzip_gpg_sdk]"
+1. Select the project you are interested
+1. Change applicationId in your-project build.gradle to your own package name
+1. Chagne app_id in string.xml ( or ids.xml ) to your game ID
+1. Run the select project. Android Studio will compile, load and start your project on your device
+
+All projects could be built at one shot from Android Studio menu "Build" -> "Clean Project"/"Rebuild Project"
+you could also build with Gradle on Terminal/Command line
+
+Build with Ant/ndk-build
+------------------------
+The script needed for ant build are kept in the file structure.
 The build script depends on the following environment variables to be set:
 ANDROID_HOME to the path where the Android SDK is installed
 NDK_ROOT to the path where the Android NDK is installed
 NDK_MODULE_PATH to the location of the Play Games cpp libraries.
+Change package name in AndroidManifest.xml to your own package
+Change app_id (in string.xml/ids.xml) to your own one
 
 Note: NDK_MODULE_PATH should point one directory *above* where
 you've installed gpg-cpp-sdk. This variable is used by ndk-build to locate
 all installed modules, not just the Google Play Games library.
 
+- To build any individual project
+    - go to samples-android/your-selected-project/src/main, like samples-android/ButtonClicker/src/main
+    - execute build.sh
+- To build all projects
+    - in samples-android directory, execute build.sh
+The apk(s) will be placed into your-project-dir/src/main/bin
+
+Support
+-------
+If you've found an error in these samples, please [file an issue](https://github.com/playgameservices/cpp-android-basic-samples/issues/new).
+
+Patches are encouraged, and may be submitted by [forking this project](https://github.com/playgameservices/cpp-android-basic-samples/fork) and
+submitting a pull request through GitHub. Please see [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
+
+- [Stack Overflow](http://stackoverflow.com/questions/tagged/google-play-games)
+- [Android Tools Feedbacks](http://tools.android.com/feedback)
+
+
+License
+-------
+Copyright 2015 Google, Inc.
+
+Licensed to the Apache Software Foundation (ASF) under one or more contributor
+license agreements.  See the NOTICE file distributed with this work for
+additional information regarding copyright ownership.  The ASF licenses this
+file to you under the Apache License, Version 2.0 (the "License"); you may not
+use this file except in compliance with the License.  You may obtain a copy of
+the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+License for the specific language governing permissions and limitations under
+the License.

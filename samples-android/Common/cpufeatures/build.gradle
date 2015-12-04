@@ -1,0 +1,29 @@
+apply plugin: "com.android.model.native"
+
+// Retrieve ndk path: ndk.dir MUST be set in file local.properties
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def ndkDir = properties.getProperty('ndk.dir')
+
+model {
+    android {
+        compileSdkVersion = 23
+    }
+
+    android.ndk {
+        moduleName = "cpufeatures"
+    }
+    
+    android.sources {
+        main {
+            jni {
+                exportedHeaders {
+                    srcDir "${ndkDir}/sources/android/cpufeatures"
+                }
+                source {
+                    srcDir "${ndkDir}/sources/android/cpufeatures"
+                }
+            }
+        }
+    }
+}

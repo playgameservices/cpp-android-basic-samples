@@ -4,11 +4,11 @@ set -eua
 # List of targets to build. Interpreted as directories relative to
 # this script's path.
 declare targets=(           \
-#  CollectAllTheStarsNative  \
-#  Minimalist                \
-#  TbmpSkeletonNative        \
-#  Teapot                    \
-#  TrivialQuestNative        \
+  CollectAllTheStarsNative  \
+  Minimalist                \
+  TbmpSkeletonNative        \
+  Teapot                    \
+  TrivialQuestNative        \
   ButtonClicker             \
 )
 
@@ -29,8 +29,10 @@ declare -i pipestatus=0
 declare failed="Failures: "
 for target in "${targets[@]}"; do
   echo "Building ${target}..." >&2
-  ${script_dir}/${target}/build.sh $@ 2>&1 \
+#  pushd 
+  ${script_dir}/${target}/src/main/build.sh $@ 2>&1 \
     | add_timestamp ${target} | tee build.log
+#  popd
   pipestatus=${PIPESTATUS[0]}
   status=status+pipestatus
   [ ${pipestatus} -ne 0 ] && failed=${failed}.${target}

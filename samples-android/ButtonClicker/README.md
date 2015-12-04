@@ -14,4 +14,4 @@ Please follow steps described in [Getting Started for C++](https://developers.go
 
 First of all, take a look at our [troubleshooting guide](https://developers.google.com/games/services/android/troubleshooting). Most setup issues can be solved by following this guide.
 
-If your question is not answered by the troubleshooting guide, we encourage you to post your question to [stackoverflow.com](stackoverflow.com). Our team answers questions there reguarly.
+If your question is not answered by the troubleshooting guide, we encourage you to post your question to [stackoverflow.com](stackoverflow.com) with tag "google-play-games". Our team answers questions there reguarly.

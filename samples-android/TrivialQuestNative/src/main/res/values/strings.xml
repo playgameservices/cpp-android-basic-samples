@@ -1,0 +1,14 @@
+<resources>
+
+    <string name="app_name">TrivialQuest</string>
+
+    <!-- Step 1: Replace by your app ID from the Play Games Console. -->
+    <string name="app_id">REPLACE_ME</string>
+
+    <!-- Step 2: Replace with your events the Play Games Console. -->
+    <string name="red_event_id">ReplaceMe</string>
+    <string name="green_event_id">ReplaceMe</string>
+    <string name="blue_event_id">ReplaceMe</string>
+    <string name="yellow_event_id">ReplaceMe</string>
+
+</resources>
