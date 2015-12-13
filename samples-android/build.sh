@@ -29,10 +29,8 @@ declare -i pipestatus=0
 declare failed="Failures: "
 for target in "${targets[@]}"; do
   echo "Building ${target}..." >&2
-#  pushd 
   ${script_dir}/${target}/src/main/build.sh $@ 2>&1 \
     | add_timestamp ${target} | tee build.log
-#  popd
   pipestatus=${PIPESTATUS[0]}
   status=status+pipestatus
   [ ${pipestatus} -ne 0 ] && failed=${failed}.${target}
