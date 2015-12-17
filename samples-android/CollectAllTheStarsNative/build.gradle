@@ -16,9 +16,8 @@ model {
         libs(PrebuiltLibraries) {
             gpg {
                 headers.srcDir "${gpg_cpp_path}/include"
-                // StaticLibraryBinary does not work, use SharedLibraryBinary for now
-                binaries.withType(SharedLibraryBinary) {
-                    sharedLibraryFile = file("${gpg_cpp_path}/lib/${stlportType}/${targetPlatform.getName()}/libgpg.a")
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("${gpg_cpp_path}/lib/${stlportType}/${targetPlatform.getName()}/libgpg.a")
                 }
             }
         }
@@ -39,7 +38,7 @@ model {
         main {
             jni {
                 dependencies {
-                    library "gpg"
+                    library "gpg" linkage "static"
                     project ":cpufeatures" linkage "static"
                     project ":native_app_glue" linkage "static"
                 }
