@@ -11,9 +11,10 @@ model {
     }
 
     android.ndk {
+        abiFilters.addAll(["armeabi", "armeabi-v7a", "x86", "arm64-v8a"])
         moduleName = "native_app_glue"
     }
-    
+
     android.sources {
         main {
             jni {
@@ -25,5 +26,59 @@ model {
                 }
             }
         }
+    }
+}
+
+/*
+    We are building a static library, so disable all the shared library tasks.
+*/
+tasks.whenTaskAdded { task ->
+    if (task.name == 'linkArmeabi-v7aDebugNative_app_glueSharedLibrary') {
+        task.enabled = false
+    }
+    else if (task.name == 'linkArm64-v8aDebugNative_app_glueSharedLibrary') {
+        task.enabled = false
+    }
+    else if (task.name == 'linkArmeabiDebugNative_app_glueSharedLibrary') {
+        task.enabled = false
+    }
+    else if (task.name == 'linkX86DebugNative_app_glueSharedLibrary') {
+        task.enabled = false
+    }
+    else if (task.name == 'stripSymbolsArmeabi-v7aDebugNative_app_glueSharedLibrary') {
+        task.enabled = false
+    }
+    else if (task.name == 'stripSymbolsArm64-v8aDebugNative_app_glueSharedLibrary') {
+        task.enabled = false
+    }
+    else if (task.name == 'stripSymbolsArmeabiDebugNative_app_glueSharedLibrary') {
+        task.enabled = false
+    }
+    else if (task.name == 'stripSymbolsX86DebugNative_app_glueSharedLibrary') {
+        task.enabled = false
+    }
+    else if (task.name == 'linkArm64-v8aReleaseNative_app_glueSharedLibrary') {
+        task.enabled = false
+    }
+    else if (task.name == 'stripSymbolsArm64-v8aReleaseNative_app_glueSharedLibrary') {
+        task.enabled = false
+    }
+    else if (task.name == 'linkArmeabi-v7aReleaseNative_app_glueSharedLibrary') {
+        task.enabled = false
+    }
+    else if (task.name == 'stripSymbolsArmeabi-v7aReleaseNative_app_glueSharedLibrary') {
+        task.enabled = false
+    }
+    else if (task.name == 'linkArmeabiReleaseNative_app_glueSharedLibrary') {
+        task.enabled = false
+    }
+    else if (task.name == 'stripSymbolsArmeabiReleaseNative_app_glueSharedLibrary') {
+        task.enabled = false
+    }
+    else if (task.name == 'linkX86ReleaseNative_app_glueSharedLibrary') {
+        task.enabled = false
+    }
+    else if (task.name == 'stripSymbolsX86ReleaseNative_app_glueSharedLibrary') {
+        task.enabled = false
     }
 }

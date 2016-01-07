@@ -5,3 +5,9 @@ libs/
 local.properties
 obj/
 .settings/
+
+.gradle/
+build/
+
+samples-android/Common/gpg-sdk/gpg-cpp-sdk/
+samples-android/Common/gpg-sdk/gpg_cpp_sdk.zip

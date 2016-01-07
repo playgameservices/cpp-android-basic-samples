@@ -305,10 +305,10 @@ void Engine::InitUI() {
   button_green_->SetCallback(
       [this](jui_helper::JUIView * view, const int32_t message) {
     if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
-      std::string id = ndk_helper::JNIHelper::GetInstance()->GetStringResource("green_event_id");
+      std::string id = ndk_helper::JNIHelper::GetInstance()->GetStringResource("event_green");
       if( id == "" || id == "ReplaceMe")
       {
-        LOGI("Invalid Event ID!, please check res/values/strings.xml");
+        LOGI("Invalid Event ID!, please check res/values/ids.xml");
         return;
       }
       service_->Events().Increment(id.c_str());
@@ -328,10 +328,10 @@ void Engine::InitUI() {
   button_yellow_->SetCallback(
       [this](jui_helper::JUIView * view, const int32_t message) {
     if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
-      std::string id = ndk_helper::JNIHelper::GetInstance()->GetStringResource("yellow_event_id");
+      std::string id = ndk_helper::JNIHelper::GetInstance()->GetStringResource("event_yellow");
       if( id == "" || id == "ReplaceMe")
       {
-        LOGI("Invalid Event ID!, please check res/values/strings.xml");
+        LOGI("Invalid Event ID!, please check res/values/ids.xml");
         return;
       }
       service_->Events().Increment(id.c_str());
@@ -351,10 +351,10 @@ void Engine::InitUI() {
   button_blue_->SetCallback(
       [this](jui_helper::JUIView * view, const int32_t message) {
     if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
-      std::string id = ndk_helper::JNIHelper::GetInstance()->GetStringResource("blue_event_id");
+      std::string id = ndk_helper::JNIHelper::GetInstance()->GetStringResource("event_blue");
       if( id == "" || id == "ReplaceMe")
       {
-        LOGI("Invalid Event ID!, please check res/values/strings.xml");
+        LOGI("Invalid Event ID!, please check res/values/ids.xml");
         return;
       }
       service_->Events().Increment(id.c_str());
@@ -374,10 +374,10 @@ void Engine::InitUI() {
   button_red_->SetCallback(
       [this](jui_helper::JUIView * view, const int32_t message) {
     if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
-      std::string id = ndk_helper::JNIHelper::GetInstance()->GetStringResource("red_event_id");
+      std::string id = ndk_helper::JNIHelper::GetInstance()->GetStringResource("event_red");
       if( id == "" || id == "ReplaceMe")
       {
-        LOGI("Invalid Event ID!, please check res/values/strings.xml");
+        LOGI("Invalid Event ID!, please check res/values/ids.xml");
         return;
       }
       service_->Events().Increment(id.c_str());

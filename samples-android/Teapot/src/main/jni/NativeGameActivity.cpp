@@ -43,10 +43,6 @@
 #define JUIHELPER_CLASS_NAME "com.sample.helper.JUIHelper"
 // Share object name of helper function library
 #define HELPER_CLASS_SONAME "NativeGameActivity"
-// Replace this with one of your non-incremental achievements.
-#define TEST_ACHIEVEMENT_ID "REPLACE_ME"
-// Replace this with one of your leaderboards.
-#define TEST_LEADERBOARD_ID "REPLACE_ME"
 
 //------------------------------------------------------------------------------
 // Shared state for our app.
@@ -156,7 +152,12 @@ void Engine::InitUI() {
       [this](jui_helper::JUIView *view, const int32_t message) {
         LOGI("Button click: %d", message);
         if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
-          StateManager::UnlockAchievement(TEST_ACHIEVEMENT_ID);
+            std::string id = ndk_helper::JNIHelper::GetInstance()->GetStringResource("achievement_prime");
+            if( id == "" || id == "ReplaceMe") {
+                LOGI("Invalid achievement ID!, please check res/values/ids.xml");
+                return;
+            }
+          StateManager::UnlockAchievement(id.c_str());
         }
       });
   jui_helper::JUIWindow::GetInstance()->AddView(button_achievement);
@@ -212,7 +213,12 @@ void Engine::InitUI() {
       [this](jui_helper::JUIView *view, const int32_t message) {
         LOGI("Button click: %d", message);
         if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
-          StateManager::SubmitHighScore(TEST_LEADERBOARD_ID, current_score_);
+            std::string id = ndk_helper::JNIHelper::GetInstance()->GetStringResource("leaderboard_easy");
+            if( id == "" || id == "ReplaceMe") {
+                LOGI("Invalid Leaderboard ID!, please check res/values/ids.xml");
+                return;
+            }
+          StateManager::SubmitHighScore(id.c_str(), current_score_);
         }
       });
   jui_helper::JUIWindow::GetInstance()->AddView(button_submit_high_score);
@@ -229,7 +235,12 @@ void Engine::InitUI() {
       [this](jui_helper::JUIView *view, const int32_t message) {
         LOGI("Button click: %d", message);
         if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
-          StateManager::ShowLeaderboard(TEST_LEADERBOARD_ID);
+            std::string id = ndk_helper::JNIHelper::GetInstance()->GetStringResource("leaderboard_easy");
+            if( id == "" || id == "ReplaceMe") {
+                LOGI("Invalid Leaderboard ID!, please check res/values/ids.xml");
+                return;
+            }
+          StateManager::ShowLeaderboard(id.c_str());
         }
       });
   jui_helper::JUIWindow::GetInstance()->AddView(button_show_leaderboard_ui);
