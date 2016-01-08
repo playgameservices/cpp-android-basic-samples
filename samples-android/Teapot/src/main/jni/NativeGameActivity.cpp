@@ -27,6 +27,7 @@
 // For GPGS
 #include "gpg/android_platform_configuration.h"
 #include "gpg/android_initialization.h"
+#include "gpg/android_support.h"
 
 #include "JavaUI.h"
 #include "NDKHelper.h"
@@ -604,6 +605,14 @@ Java_com_google_example_nativegame_NativeGameActivity_OnPauseHandler(
   // we are releasing popupWindows explicitly triggered from Java callback
   // through JNI call.
   jui_helper::JUIWindow::GetInstance()->Suspend(APP_CMD_PAUSE);
+}
+
+JNIEXPORT void
+Java_com_google_example_nativegame_NativeGameActivity_nativeOnActivityResult(
+        JNIEnv *env, jobject thiz, jobject activity, jint requestCode,
+        jint resultCode, jobject data) {
+  gpg::AndroidSupport::OnActivityResult(env, activity, requestCode, resultCode,
+                                        data);
 }
 }  // extern "C"
 

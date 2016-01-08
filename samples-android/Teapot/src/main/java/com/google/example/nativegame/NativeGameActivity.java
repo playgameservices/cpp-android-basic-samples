@@ -16,7 +16,9 @@
 
 package com.google.example.nativegame;
 
+import android.app.Activity;
 import android.app.NativeActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -130,26 +132,38 @@ public class NativeGameActivity extends NativeActivity {
 
             }});
     }
-    
-	protected void onPause() {
-		super.onPause();
+
+    protected void onPause() {
+        super.onPause();
         if (_popupWindow != null) {
             _popupWindow.dismiss();
             _popupWindow = null;
         }
 
         // This call is to suppress 'E/WindowManager():
-		// android.view.WindowLeaked...' errors.
-		// Since orientation change events in NativeActivity comes later than
-		// expected, we can not dismiss
-		// popupWindow gracefully from NativeActivity.
-		// So we are releasing popupWindows explicitly triggered from Java
-		// callback through JNI call.
-		OnPauseHandler();
-	}
+        // android.view.WindowLeaked...' errors.
+        // Since orientation change events in NativeActivity comes later than
+        // expected, we can not dismiss
+        // popupWindow gracefully from NativeActivity.
+        // So we are releasing popupWindows explicitly triggered from Java
+        // callback through JNI call.
+        OnPauseHandler();
+    }
 
-	native public void OnPauseHandler();
+    native public void OnPauseHandler();
 
+
+    /*
+    *   This is needed to foward the onActivityResult call to the games SDK.
+    *   The SDK uses this to manage the display of the standard UI calls.
+    */
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        nativeOnActivityResult(this, requestCode,resultCode, data);
+    }
+
+    // Implemented in C++.
+    public static native void nativeOnActivityResult(Activity activity,
+                                                     int requestCode, int resultCode, Intent data);
 }
 
 

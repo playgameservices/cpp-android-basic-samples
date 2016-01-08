@@ -1,8 +1,4 @@
 apply plugin: 'com.android.model.application'
-// Retrieve ndk path: ndk.dir MUST be set in file local.properties
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-def ndkDir = properties.getProperty('ndk.dir')
 
 def gpg_cpp_path = file(project(':Common/gpg-sdk').projectDir).absolutePath + "/gpg-cpp-sdk/android"
 
@@ -23,13 +19,13 @@ model {
         }
     }
     android {
-        compileSdkVersion=22
-        buildToolsVersion="23.0.1"
+        compileSdkVersion=23
+        buildToolsVersion="23.0.2"
 
         defaultConfig.with {
             applicationId = "com.google.example.nativegame"
             minSdkVersion.apiLevel = 11
-            targetSdkVersion.apiLevel = 19
+            targetSdkVersion.apiLevel = 23
 
         }
     }
@@ -73,8 +69,9 @@ model {
         }
     }
 }
-
 dependencies {
-    compile 'com.android.support:support-v4:22.2.1'
-    compile 'com.google.android.gms:play-services:8.3.0'
+    compile 'com.google.android.gms:play-services-games:8.4.0'
+    compile 'com.google.android.gms:play-services-nearby:8.4.0'
+    compile 'com.google.android.gms:play-services-plus:8.4.0'
+    compile 'com.android.support:support-v4:23.1.1'
 }

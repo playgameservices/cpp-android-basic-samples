@@ -16,10 +16,6 @@
 
 package com.sample.helper;
 
-import java.io.File;
-import java.io.FileInputStream;
-import javax.microedition.khronos.opengles.GL10;
-
 import android.annotation.TargetApi;
 import android.app.NativeActivity;
 import android.content.Context;
@@ -34,6 +30,11 @@ import android.media.AudioTrack;
 import android.opengl.GLUtils;
 import android.os.Build;
 import android.util.Log;
+
+import java.io.File;
+import java.io.FileInputStream;
+
+import javax.microedition.khronos.opengles.GL10;
 
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class NDKHelper {
@@ -208,6 +209,12 @@ public class NDKHelper {
         String applicationName = (String) (ai != null ? pm
                 .getApplicationLabel(ai) : "(unknown)");
         return applicationName;
+    }
+
+    public String getStringResource(String resourceName) {
+        int id = activity.getResources().getIdentifier(resourceName, "string", activity.getPackageName());
+        String value = id == 0 ? "" : (String)activity.getResources().getText(id);
+        return value;
     }
 
     //

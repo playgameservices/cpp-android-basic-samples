@@ -1,3 +1,4 @@
+.idea/
 bin/
 build.xml
 gen/
@@ -8,6 +9,8 @@ obj/
 
 .gradle/
 build/
+
+*.iml
 
 samples-android/Common/gpg-sdk/gpg-cpp-sdk/
 samples-android/Common/gpg-sdk/gpg_cpp_sdk.zip
