@@ -2,7 +2,7 @@
     sub module to download the Google Play games
  */
 project.ext {
-    gpg_sdk_link = 'https://developers.google.com/games/services/downloads/gpg-cpp-sdk.v2.0.zip'
+    gpg_sdk_link = 'https://developers.google.com/games/services/downloads/gpg-cpp-sdk.v2.1.zip'
 }
 task download_and_stage_gpg_sdk(dependsOn:'unzip_gpg_sdk') {
 
@@ -37,7 +37,7 @@ task unzip_gpg_sdk() {
     dependsOn fetch_gpg_cpp_sdk
 }
 
-task clean_sdk () {
+task clean() {
     doFirst {
         file('gpg_cpp_sdk.zip').delete()
     }
