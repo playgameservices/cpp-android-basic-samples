@@ -1,9 +1,21 @@
 apply plugin: "com.android.model.native"
 
-// Retrieve ndk path: ndk.dir MUST be set in file local.properties
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-def ndkDir = properties.getProperty('ndk.dir')
+def ndkDir = null
+
+if (project.rootProject.file('local.properties').exists()) {
+    // Retrieve ndk path: ndk.dir MUST be set in file local.properties
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    ndkDir = properties.getProperty('ndk.dir')
+} else if (System.getProperty('ANDROID_NDK_HOME') != null) {
+    ndkDir = System.getProperty('ANDROID_NDK_HOME')
+} else if (System.getenv('ANDROID_NDK_HOME') != null) {
+    ndkDir = System.getenv('ANDROID_NDK_HOME')
+}
+
+if (ndkDir == null || ndkDir == "") {
+    throw new Exception("Need to run from Android Studio or define ANDROID_NDK_HOME")
+}
 
 model {
     android {
@@ -33,52 +45,7 @@ model {
     We are building a static library, so disable all the shared library tasks.
 */
 tasks.whenTaskAdded { task ->
-    if (task.name == 'linkArmeabi-v7aDebugNative_app_glueSharedLibrary') {
-        task.enabled = false
-    }
-    else if (task.name == 'linkArm64-v8aDebugNative_app_glueSharedLibrary') {
-        task.enabled = false
-    }
-    else if (task.name == 'linkArmeabiDebugNative_app_glueSharedLibrary') {
-        task.enabled = false
-    }
-    else if (task.name == 'linkX86DebugNative_app_glueSharedLibrary') {
-        task.enabled = false
-    }
-    else if (task.name == 'stripSymbolsArmeabi-v7aDebugNative_app_glueSharedLibrary') {
-        task.enabled = false
-    }
-    else if (task.name == 'stripSymbolsArm64-v8aDebugNative_app_glueSharedLibrary') {
-        task.enabled = false
-    }
-    else if (task.name == 'stripSymbolsArmeabiDebugNative_app_glueSharedLibrary') {
-        task.enabled = false
-    }
-    else if (task.name == 'stripSymbolsX86DebugNative_app_glueSharedLibrary') {
-        task.enabled = false
-    }
-    else if (task.name == 'linkArm64-v8aReleaseNative_app_glueSharedLibrary') {
-        task.enabled = false
-    }
-    else if (task.name == 'stripSymbolsArm64-v8aReleaseNative_app_glueSharedLibrary') {
-        task.enabled = false
-    }
-    else if (task.name == 'linkArmeabi-v7aReleaseNative_app_glueSharedLibrary') {
-        task.enabled = false
-    }
-    else if (task.name == 'stripSymbolsArmeabi-v7aReleaseNative_app_glueSharedLibrary') {
-        task.enabled = false
-    }
-    else if (task.name == 'linkArmeabiReleaseNative_app_glueSharedLibrary') {
-        task.enabled = false
-    }
-    else if (task.name == 'stripSymbolsArmeabiReleaseNative_app_glueSharedLibrary') {
-        task.enabled = false
-    }
-    else if (task.name == 'linkX86ReleaseNative_app_glueSharedLibrary') {
-        task.enabled = false
-    }
-    else if (task.name == 'stripSymbolsX86ReleaseNative_app_glueSharedLibrary') {
+    if (task.name.contains("SharedLibrary")) {
         task.enabled = false
     }
 }

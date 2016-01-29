@@ -1,6 +1,17 @@
 apply plugin: 'com.android.model.application'
 
-evaluationDependsOn(':Common/gpg-sdk')   
+// Depend on another project that downloads and unzips the C++ SDK.
+evaluationDependsOn(':Common/gpg-sdk')
+
+// As the plugin has created the build tasks, add the gpg-sdk task to
+// the task dependencies so it gets done before compiling
+tasks.whenTaskAdded { task ->
+    if (task.name.equals("preBuild")) {
+        project(':Common/gpg-sdk').defaultTasks.each { t ->
+            task.dependsOn project(':Common/gpg-sdk').tasks[t]
+        }
+    }
+}
 
 def gpg_cpp_path = file(project(':Common/gpg-sdk').projectDir).absolutePath + "/gpg-cpp-sdk/android"
 
@@ -21,20 +32,11 @@ model {
         }
     }
     android {
- signingConfigs.with {
-	debug {
-		storeFile = file('/Users/wilkinsonclay/gswitch/automation-cpp-android-samples/configs/debug.keystore')
-		keyAlias = 'androiddebugkey'
-		keyPassword = 'android'
-		storePassword = 'android'
-	}
-}
-
         compileSdkVersion=23
         buildToolsVersion="23.0.2"
 
         defaultConfig.with {
-            applicationId= "com.google.clayton.play.bc"
+            applicationId="com.google.example.games.ButtonClicker"
             minSdkVersion.apiLevel = 11
             targetSdkVersion.apiLevel = 23
         }
