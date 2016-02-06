@@ -7,12 +7,12 @@ A set of the sample to demonstrate how to use Google Play Games Native Interface
 
 Pre-requisites
 --------------
-1. change the applicationId inside each individual samples build.gradle to your own package name
-2. change app_id to your registered game ID, which was assigned to you by play game console
+1. Change the applicationId inside each individual samples build.gradle to your own package name
+1. Update the `app_id` and any configured constants in the sample's `src/main/res/values/id.xml` file to those registered in the [Play Games Services console](https://play.google.com/apps/publish)
 
 Build with Android Studio
 -------------------------
-This project need Android Studio 1.5+ with ndk support
+This project requires Android Studio 1.5+ with ndk support
 1. Launch Android Studio.
 1. Open the sample project at cpp-android-basic-samples/samples-android
 1. Disable "Instant Run" from Settings-> Build Execution, Deployment -> Instant Run
@@ -26,26 +26,48 @@ This project need Android Studio 1.5+ with ndk support
 All projects could be built at one shot from Android Studio menu "Build" -> "Clean Project"/"Rebuild Project"
 you could also build with Gradle on Terminal/Command line
 
-Build with Ant/ndk-build
-------------------------
-The script needed for ant build are kept in the file structure.
-The build script depends on the following environment variables to be set:
-ANDROID_HOME to the path where the Android SDK is installed
-NDK_ROOT to the path where the Android NDK is installed
-NDK_MODULE_PATH to the location of the Play Games cpp libraries.
-Change package name in AndroidManifest.xml to your own package
-Change app_id (in string.xml/ids.xml) to your own one
+Build using Gradle on OS X or Linux
+-----------------------------------
+1. Install Android Studio
+1. Set the path to the Android SDK
 
-Note: NDK_MODULE_PATH should point one directory *above* where
-you've installed gpg-cpp-sdk. This variable is used by ndk-build to locate
-all installed modules, not just the Google Play Games library.
+    export ANDROID_HOME=~/Library/Android/sdk
 
-- To build any individual project
-    - go to samples-android/your-selected-project/src/main, like samples-android/ButtonClicker/src/main
-    - execute build.sh
-- To build all projects
-    - in samples-android directory, execute build.sh
-The apk(s) will be placed into your-project-dir/src/main/bin
+1. Add the SDK to your path
+
+    export PATH=$PATH;$ANDROID_HOME/tools;$ANDROID_HOME/platform-tools
+
+1. Set the path to the Android NDK
+
+    export ANDROID_NDK_HOME=<PATH_TO_NDK>/android-ndk-r10e
+
+1. Execute the build script
+
+    ./gradlew assemble
+
+Build on Windows using Gradle
+-----------------------------
+1. Install Android Studio
+1. Set the path to the Android SDK
+
+    set ANDROID_HOME=C:\Users\<yourusername>\AppData\Local\Android\sdk
+
+1. Add the SDK to your path
+
+    set PATH=%PATH%;%ANDROID_HOME%\tools;%ANDROID_HOME%\platform-tools
+
+1. Set the path to the Android NDK
+
+    set ANDROID_NDK_HOME=C:\Users\<yourusername>\Desktop\android-ndk-r10e
+
+1. (Optional) On some versions of Windows it is helpful to map the samples folder to a shortened path.
+
+    subst G: C:\<full-path-to-sample-folder>
+
+1. Execute the build script
+
+    G:
+    gradlew.bat assemble
 
 Support
 -------
