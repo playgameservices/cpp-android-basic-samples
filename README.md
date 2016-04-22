@@ -26,6 +26,10 @@ To use these samples, you need the Google Play Game Services C++ SDK, which you
 can [download from here](https://developers.google.com/games/services/downloads/).
 
 After downloading the archive, unzip it to the  `./gpg-cpp-sdk` directory. Then, follow [these directions](https://developers.google.com/games/services/cpp/GettingStartedNativeClient).
+<h2> Other resources </h2>
+* [Google Android Vulkan Tutorials](https://github.com/ggfan/android-vulkan-tutorials)
+* [Android Vulkan API Basic Samples](https://github.com/googlesamples/vulkan-basic-samples)
+* [Google Android NDK Samples](https://github.com/googlesamples/android-ndk)
 
 <h2>Acknowledgment</h2>
 Some of these samples use the following open-source project:
