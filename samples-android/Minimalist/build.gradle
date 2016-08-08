@@ -6,10 +6,9 @@ evaluationDependsOn(':Common/gpg-sdk')
 // As the plugin has created the build tasks, add the gpg-sdk task to
 // the task dependencies so it gets done before compiling
 tasks.whenTaskAdded { task ->
-    if (task.name.equals("preBuild")) {
-        project(':Common/gpg-sdk').defaultTasks.each { t ->
-            task.dependsOn project(':Common/gpg-sdk').tasks[t]
-        }
+    project(':Common/gpg-sdk').defaultTasks.each {
+        t ->task.dependsOn project(':Common/gpg-sdk').tasks[t]
+
     }
 }
 
@@ -37,7 +36,10 @@ model {
         buildToolsVersion = "23.0.2"
 
         defaultConfig.with {
-            applicationId = "com.google.example.games.Minimalist"
+            //
+            //  REPLACE THE APPLICATION ID with your bundle ID
+            //
+            applicationId="com.google.example.games.ReplaceMe"
             minSdkVersion.apiLevel = 11
             targetSdkVersion.apiLevel = 23
 
@@ -85,6 +87,5 @@ model {
 dependencies {
     compile 'com.google.android.gms:play-services-games:8.4.0'
     compile 'com.google.android.gms:play-services-nearby:8.4.0'
-    compile 'com.google.android.gms:play-services-plus:8.4.0'
     compile 'com.android.support:support-v4:23.1.1'
 }

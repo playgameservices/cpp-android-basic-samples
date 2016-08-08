@@ -23,16 +23,18 @@ fetch_gpg_cpp_sdk.description = "Download the gpg sdk from the specified locatio
 
 task unzip_gpg_sdk() {
     doFirst {
-        copy {
-            from(zipTree('gpg_cpp_sdk.zip')) {
-                exclude 'gpg_cpp_sdk/ios'
-            }
+        if (!file('gpg-cpp-sdk').exists()) {
+            copy {
+                from(zipTree('gpg_cpp_sdk.zip')) {
+                    exclude 'gpg-cpp-sdk/ios/**/*'
+                }
 
-            into { project.projectDir }
+                into { project.projectDir }
+            }
         }
     }
-    outputs.dir('gpg_cpp_sdk/android')
-    outputs.upToDateWhen {file('gpg_cpp_sdk/android').exists()}
+    outputs.dir('gpg-cpp-sdk/android')
+    outputs.upToDateWhen {file('gpg-cpp-sdk/android').exists()}
     description = "Unzips the GPG SDK into the correct dir for NDK"
     dependsOn fetch_gpg_cpp_sdk
 }
