@@ -31,9 +31,10 @@ endif
 
 include $(BUILD_SHARED_LIBRARY)
 
+include $(LOCAL_PATH)/../../../../Common/gpg-sdk/gpg-cpp-sdk/android/Android.mk
+
 $(call import-add-path,$(LOCAL_PATH)/../../../../Common)
 $(call import-module,ndk_helper)
 $(call import-module,jui_helper)
-$(call import-module,gpg-cpp-sdk/android)
 $(call import-module,android/native_app_glue)
 $(call import-module,android/cpufeatures)

@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle-experimental:0.7.0'
+        classpath 'com.android.tools.build:gradle:2.2.3'
     }
 }
 
@@ -13,3 +13,5 @@ allprojects {
         jcenter()
     }
 }
+
+// GPG SDK requires r10e or eariler.

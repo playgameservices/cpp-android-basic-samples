@@ -1,4 +1,4 @@
-apply plugin: 'com.android.model.application'
+apply plugin: 'com.android.application'
 
 // Depend on another project that downloads and unzips the C++ SDK.
 evaluationDependsOn(':Common/gpg-sdk')
@@ -12,80 +12,31 @@ tasks.whenTaskAdded { task ->
         }
 }
 
-def gpg_cpp_path = file(project(':Common/gpg-sdk').projectDir).absolutePath + "/gpg-cpp-sdk/android"
+android {
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
+    defaultConfig {
+        //
+        //  REPLACE THE APPLICATION ID with your bundle ID
+        //
+        applicationId "com.google.example.games.ReplaceMe"
+        minSdkVersion 14
+        targetSdkVersion  23
 
-// stlport configuration ["c++_static", "c++_shared", "gnustl_static", "gnustl_shared"]
-// used to set stl and location of libgpg.a
-def stlportType = "c++"
-def stllinkType = "static"
+        ndk {
+            abiFilters 'x86', 'armeabi-v7a'
+        }
+    }
 
-model {
-    repositories {
-        libs(PrebuiltLibraries) {
-            gpg {
-                headers.srcDir "${gpg_cpp_path}/include"
-                binaries.withType(StaticLibraryBinary) {
-                    staticLibraryFile = file("${gpg_cpp_path}/lib/${stlportType}/${targetPlatform.getName()}/libgpg.a")
-                }
-            }
-        }
-    }
-    android {
-        compileSdkVersion=23
-        buildToolsVersion="23.0.2"
-
-        defaultConfig.with {
-            //
-            //  REPLACE THE APPLICATION ID with your bundle ID
-            //
-            applicationId="com.google.example.games.ReplaceMe"
-            minSdkVersion.apiLevel = 11
-            targetSdkVersion.apiLevel = 23
-        }
-    }
-    android.sources {
-        main {
-            jni {
-                dependencies {
-                    library "gpg" linkage "static"
-                    project ":Common/cpufeatures" linkage "static"
-                    project ":Common/native_app_glue" linkage "static"
-                }
-                source {
-                    srcDir 'src/main/jni'
-                    srcDir '../Common/ndk_helper'
-                    srcDir '../Common/jui_helper'
-                }
-            }
-        }
-    }
-    android.ndk {
-        platformVersion = 11
-        moduleName = "ButtonClickerNativeActivity"
-        stl = "${stlportType}_${stllinkType}"
-        ldLibs.addAll(["atomic", "log", "android", "EGL", "GLESv2", "z"])
-        abiFilters.addAll(["armeabi", "armeabi-v7a", "x86", "arm64-v8a"])
-        cppFlags.addAll(["-std=c++11",
-                         "-I${file("../Common/ndk_helper")}".toString(),
-                         "-I${file("../Common/jui_helper")}".toString() ])
-    }
-    android.buildTypes {
-        release {
-            minifyEnabled=false
-            proguardFiles.add(file('proguard-android.txt'))
-        }
-    }
-    android.abis {
-        create("armeabi-v7a") {
-                cppFlags.addAll(["-mhard-float", "-D_NDK_MATH_NO_SOFTFP=1", "-mfloat-abi=hard"])
-                ldLibs.add("m_hard")
-                ldFlags.add("-Wl,--no-warn-mismatch")
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/main/jni/Android.mk'
         }
     }
 }
 
 dependencies {
-    compile 'com.google.android.gms:play-services-games:8.4.0'
-    compile 'com.google.android.gms:play-services-nearby:8.4.0'
+    compile 'com.google.android.gms:play-services-games:10.0.0'
+    compile 'com.google.android.gms:play-services-nearby:10.0.0'
     compile 'com.android.support:support-v4:23.1.1'
 }

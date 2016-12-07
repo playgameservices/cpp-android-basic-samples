@@ -10,7 +10,7 @@ LOCAL_SRC_FILES := TBMPSkeletonNativeActivity.cpp \
  ../../../../Common/external/jsoncpp/src/lib_json/json_reader.cpp \
  ../../../../Common/external/jsoncpp/src/lib_json/json_value.cpp
  
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/.. $(LOCAL_PATH)/../../../../Common/external/jsoncpp/include/
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../../Common/external/jsoncpp/include/
 LOCAL_CFLAGS :=
 LOCAL_CPPFLAGS := -std=c++11
 
@@ -31,10 +31,10 @@ endif
 
 include $(BUILD_SHARED_LIBRARY)
 
+include $(LOCAL_PATH)/../../../../Common/gpg-sdk/gpg-cpp-sdk/android/Android.mk
+
 $(call import-add-path,$(LOCAL_PATH)/../../../../Common)
-$(call import-add-path,$(LOCAL_PATH))
 $(call import-module,ndk_helper)
 $(call import-module,jui_helper)
-$(call import-module,gpg-cpp-sdk/android)
 $(call import-module,android/native_app_glue)
 $(call import-module,android/cpufeatures)

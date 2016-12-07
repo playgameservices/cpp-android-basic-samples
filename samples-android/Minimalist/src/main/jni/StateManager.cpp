@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-#include "jni/StateManager.h"
+#include "StateManager.h"
 
 #ifdef __APPLE__
 // Logging for CoreFoundation

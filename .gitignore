@@ -9,6 +9,7 @@ obj/
 
 .gradle/
 build/
+.externalNativeBuild/
 
 *.iml
 
