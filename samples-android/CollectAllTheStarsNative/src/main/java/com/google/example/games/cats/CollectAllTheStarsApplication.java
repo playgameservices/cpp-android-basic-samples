@@ -20,5 +20,6 @@ import android.app.Application;
 
 public class CollectAllTheStarsApplication extends Application {
     public void onCreate() {
+        super.onCreate();
     }
 }

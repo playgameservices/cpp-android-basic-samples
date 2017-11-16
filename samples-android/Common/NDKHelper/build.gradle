@@ -1,10 +1,10 @@
-/*
- * Copyright 2017 (C) Google LLC
+/* Copyright (C) 2017 Google Inc.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,30 +12,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-apply plugin : 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
   compileSdkVersion 26
   defaultConfig {
-    //
-    //  REPLACE THE APPLICATION ID with your bundle ID
-    //
-    applicationId "com.google.example.games.ReplaceMe"
     minSdkVersion 14
     targetSdkVersion 26
-
 
     ndk.abiFilters 'x86', 'armeabi-v7a', 'arm64-v8a'
 
     externalNativeBuild {
       cmake {
         cppFlags "-std=c++11 -Wall -frtti"
+        targets "ndkhelper"
         arguments "-DANDROID_STL=c++_static",
-          "-DJUI_HELPER_PATH=${project(':Common:JuiHelper').projectDir}",
-          "-DNDK_HELPER_PATH=${project(':Common:NDKHelper').projectDir}",
-          "-DGPG_SDK_PATH=${project(':Common:gpg-sdk').projectDir}/gpg-cpp-sdk/android",
-          "-DTEAPOT_RENDERER_PATH=${project(':Common').projectDir}/TeapotRenderer"
+            "-DNDK_HELPER_PATH=${project(':Common:JuiHelper').projectDir}"
       }
     }
   }
@@ -43,11 +35,11 @@ android {
   externalNativeBuild {
     cmake.path "CMakeLists.txt"
   }
-}
 
-dependencies {
-  implementation project(":Common:JuiHelper")
-  implementation 'com.google.android.gms:play-services-games:11.6.2'
-  implementation 'com.google.android.gms:play-services-nearby:11.6.2'
-  implementation 'com.android.support:support-v4:26.1.0'
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt')
+    }
+  }
 }

@@ -182,9 +182,9 @@ void Engine::SaveSnapshot() {
 }
 
 bool
-Engine::ResolveConflicts(gpg::SnapshotManager::OpenResponse const &openResponse,
+Engine::ResolveConflicts(gpg::SnapshotManager::OpenResponse const &originalResponse,
                          const int32_t retry) {
-  if (openResponse.conflict_id == "") {
+  if (originalResponse.conflict_id == "") {
     LOGI("No conflict detected");
     return true;
   }
@@ -194,7 +194,7 @@ Engine::ResolveConflicts(gpg::SnapshotManager::OpenResponse const &openResponse,
   //
   gpg::SnapshotManager &manager = service_->Snapshots();
   gpg::SnapshotManager::OpenResponse responseBase =
-      manager.OpenBlocking(openResponse.conflict_original.FileName(),
+      manager.OpenBlocking(originalResponse.conflict_original.FileName(),
                            gpg::SnapshotConflictPolicy::MANUAL);
   gpg::SnapshotManager::ReadResponse responseReadBase =
       manager.ReadBlocking(responseBase.data);
@@ -208,7 +208,7 @@ Engine::ResolveConflicts(gpg::SnapshotManager::OpenResponse const &openResponse,
     }
 
   gpg::SnapshotManager::OpenResponse responseRemote =
-      manager.OpenBlocking(openResponse.conflict_unmerged.FileName(),
+      manager.OpenBlocking(originalResponse.conflict_unmerged.FileName(),
                            gpg::SnapshotConflictPolicy::MANUAL);
   gpg::SnapshotManager::ReadResponse responseReadRemote =
       manager.ReadBlocking(responseRemote.data);
@@ -235,13 +235,16 @@ Engine::ResolveConflicts(gpg::SnapshotManager::OpenResponse const &openResponse,
           .SetCoverImageFromPngData(pngData).Create();
 
   //Resolve conflict
-  gpg::SnapshotManager::CommitResponse commitResponse =
-      manager.ResolveConflictBlocking(openResponse.data, metadata_change,
-                                      openResponse.conflict_id);
-  if (IsSuccess(commitResponse.status)) {
+  gpg::SnapshotManager::OpenResponse openResponse =
+      manager.ResolveConflictBlocking(originalResponse.conflict_id,
+                                      originalResponse.data, metadata_change,
+                                      SetupSnapshotData());
+
+
+  if (IsSuccess(openResponse.status)) {
     LOGI("Conflict resolution succeeded");
   } else {
-    LOGI("Conflict resolution failed error: %d", commitResponse.status);
+    LOGI("Conflict resolution failed error: %d", openResponse.status);
   }
 
   //Try to re-open,
@@ -257,9 +260,6 @@ Engine::ResolveConflicts(gpg::SnapshotManager::OpenResponse const &openResponse,
     }
   }
 
-  SaveSnapshot();  //Currently, we need to save data again.
-                          //We will have convenient API to resolve conflicts and save data
-                          //In upcoming release
   return true;
 }
 
@@ -280,7 +280,7 @@ void Engine::LoadFromSnapshot() {
     LOGI("Opened file");
     if (IsSuccess(response.status)) {
       //Do need conflict resolution?
-      if (response.data.Valid() == false) {
+      if (!response.data.Valid()) {
         if (response.conflict_id != "") {
           LOGI("Need conflict resolution");
           bool b = ResolveConflicts(response, 0);
@@ -386,7 +386,7 @@ std::vector<uint8_t> Engine::SetupSnapshotData() {
     v.push_back(i);
   }
 
-  LOGI("Created Game Data: size: %d", v.size());
+  LOGI("Created Game Data: size: %ld", v.size());
   return v;
 }
 
@@ -518,17 +518,17 @@ void Engine::InitUI() {
                   jui_helper::LAYOUT_PARAMETER_TRUE);
     button_games_[index + 1]->SetMargins(50, 50, 50, 50);
 
-    jui_helper::JUILinearLayout *layout = new jui_helper::JUILinearLayout();
-    layout->SetLayoutParams(jui_helper::ATTRIBUTE_SIZE_MATCH_PARENT,
+    jui_helper::JUILinearLayout *layout2 = new jui_helper::JUILinearLayout();
+    layout2->SetLayoutParams(jui_helper::ATTRIBUTE_SIZE_MATCH_PARENT,
                             jui_helper::ATTRIBUTE_SIZE_WRAP_CONTENT);
-    layout->SetMargins(0, 50, 0, 50);
-    layout->SetAttribute("Orientation",
+    layout2->SetMargins(0, 50, 0, 50);
+    layout2->SetAttribute("Orientation",
                          jui_helper::LAYOUT_ORIENTATION_HORIZONTAL);
-    layout->SetAttribute("Gravity", jui_helper::ATTRIBUTE_GRAVITY_CENTER);
-    layout->AddView(button_games_[index + 0]);
-    layout->AddView(button_games_[index + 1]);
-    layout->AddView(button_games_[index + 2]);
-    masterLayout->AddView(layout);
+    layout2->SetAttribute("Gravity", jui_helper::ATTRIBUTE_GRAVITY_CENTER);
+    layout2->AddView(button_games_[index + 0]);
+    layout2->AddView(button_games_[index + 1]);
+    layout2->AddView(button_games_[index + 2]);
+    masterLayout->AddView(layout2);
 
     index += 3;
   }

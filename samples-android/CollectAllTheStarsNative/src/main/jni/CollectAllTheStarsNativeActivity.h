@@ -70,11 +70,6 @@ const bool ALLOW_CREATE_SNAPSHOT_INUI = true;
 const bool ALLOW_DELETE_SNAPSHOT_INUI = true;
 const char* const SNAPSHOT_UI_TITLE = "Collect All The Stars";
 
-enum NEXT_PARTICIPANT {
-  NEXT_PARTICIPANT_AUTOMATCH = -1,
-  NEXT_PARTICIPANT_NONE = -2,
-};
-
 /*
  * Engine class of the sample
  */
@@ -86,7 +81,7 @@ public:
   void ShowSnapshotSelectUI();
   void LoadFromSnapshot();
   void SaveSnapshot();
-  bool ResolveConflicts(gpg::SnapshotManager::OpenResponse const &openResponse,
+  bool ResolveConflicts(gpg::SnapshotManager::OpenResponse const &originalResponse,
                         const int32_t retry);
 
   // Event handling

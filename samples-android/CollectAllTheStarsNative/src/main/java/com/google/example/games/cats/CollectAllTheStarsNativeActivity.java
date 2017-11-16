@@ -26,7 +26,7 @@ import android.view.View;
 public class CollectAllTheStarsNativeActivity extends NativeActivity {
     // Load SO
     static {
-        System.load("libCollectAllTheStarsNativeActivity.so");
+   System.loadLibrary("CollectAllTheStarsNativeActivity");
     }
 
     @Override

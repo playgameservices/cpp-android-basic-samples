@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 The Android Open Source Project
+ * Copyright 2017 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.sample.helper;
 
-package com.google.example.games.ButtonClicker;
+import android.app.NativeActivity;
+import android.widget.LinearLayout;
 
-import android.app.Application;
+/*
+ * Java UI LinearLayout implementation
+ */
+public class JUILinearLayout extends LinearLayout {
+    public JUIForwardingPopupWindow getDummyWindow() {
+        return null;
+    }
 
-public class ButtonClickerApplication extends Application {
-    public void onCreate() {
-        super.onCreate();
+    public JUILinearLayout(final NativeActivity activity) {
+        super(activity);
     }
 }

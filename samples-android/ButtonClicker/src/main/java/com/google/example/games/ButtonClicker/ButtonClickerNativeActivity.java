@@ -26,7 +26,7 @@ import android.view.View;
 public class ButtonClickerNativeActivity extends NativeActivity {
     // Load SO
     static {
-        System.load("libButtonClickerNativeActivity.so");
+        System.loadLibrary("ButtonClickerNativeActivity");
     }
 
     @Override
@@ -46,7 +46,6 @@ public class ButtonClickerNativeActivity extends NativeActivity {
                         }
                     });
         }
-
         nativeOnActivityCreated(this, savedInstanceState);
     }
 
