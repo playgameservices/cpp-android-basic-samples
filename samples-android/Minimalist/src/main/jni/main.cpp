@@ -33,7 +33,6 @@
 
 // BEGIN_INCLUDE(all)
 #include <jni.h>
-#include <errno.h>
 
 #include <EGL/egl.h>
 #include <GLES/gl.h>
@@ -264,8 +263,6 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
  */
 void android_main(struct android_app* state) {
   struct engine engine;
-  // Make sure glue isn't stripped.
-  app_dummy();
 
   memset(&engine, 0, sizeof(engine));
   state->userData = &engine;
@@ -336,9 +333,6 @@ void android_main(struct android_app* state) {
           ASensorEvent event;
           while (ASensorEventQueue_getEvents(engine.sensorEventQueue, &event,
                                              1) > 0) {
-            /*        LOGI("accelerometer: x=%f y=%f z=%f",
-                      event.acceleration.x, event.acceleration.y,
-                      event.acceleration.z); */
           }
         }
       }
