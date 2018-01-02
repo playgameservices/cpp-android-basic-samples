@@ -45,14 +45,14 @@ void Engine::InitGooglePlayGameServices() {
       OnAuthActionFinished(op, status);
     })
         .SetOnTurnBasedMatchEvent(
-            [this](gpg::TurnBasedMultiplayerEvent event, std::string match_id,
+            [this](gpg::MultiplayerEvent event, std::string match_id,
                    gpg::TurnBasedMatch match) {
       LOGI("TurnBasedMultiplayerEvent callback");
       //Show default inbox
       ShowMatchInbox();
     })
         .SetOnMultiplayerInvitationEvent(
-            [this](gpg::TurnBasedMultiplayerEvent event, std::string match_id,
+            [this](gpg::MultiplayerEvent event, std::string match_id,
                    gpg::MultiplayerInvitation invitation) {
       LOGI("MultiplayerInvitationEvent callback");
       //Show default inbox
@@ -425,8 +425,8 @@ void Engine::ManageGame(gpg::TurnBasedMatch const &match, const bool leave,
     if (leave) {
       LOGI("Adding leave button");
       // Leave Button
-      jui_helper::JUIButton *button = new jui_helper::JUIButton("Leave");
-      button->SetCallback(
+      jui_helper::JUIButton *leaveButton = new jui_helper::JUIButton("Leave");
+      leaveButton->SetCallback(
           [this](jui_helper::JUIView * view, const int32_t message) {
         switch (message) {
         case jui_helper::JUICALLBACK_BUTTON_UP: {
@@ -435,18 +435,18 @@ void Engine::ManageGame(gpg::TurnBasedMatch const &match, const bool leave,
         }
         }
       });
-      button->AddRule(jui_helper::LAYOUT_PARAMETER_CENTER_IN_PARENT,
+      leaveButton->AddRule(jui_helper::LAYOUT_PARAMETER_CENTER_IN_PARENT,
                       jui_helper::LAYOUT_PARAMETER_TRUE);
-      button->AddRule(jui_helper::LAYOUT_PARAMETER_BELOW, currentButton);
-      dialog_->AddView(button);
-      currentButton = button;
+      leaveButton->AddRule(jui_helper::LAYOUT_PARAMETER_BELOW, currentButton);
+      dialog_->AddView(leaveButton);
+      currentButton = leaveButton;
     }
 
     if (cancel) {
       LOGI("Adding cancel button");
-      // Leave Button
-      jui_helper::JUIButton *button = new jui_helper::JUIButton("Cancel");
-      button->SetCallback(
+      // Cancel Button
+      jui_helper::JUIButton *cancelButton = new jui_helper::JUIButton("Cancel");
+      cancelButton->SetCallback(
           [this](jui_helper::JUIView * view, const int32_t message) {
         switch (message) {
         case jui_helper::JUICALLBACK_BUTTON_UP: {
@@ -455,18 +455,18 @@ void Engine::ManageGame(gpg::TurnBasedMatch const &match, const bool leave,
         }
         }
       });
-      button->AddRule(jui_helper::LAYOUT_PARAMETER_CENTER_IN_PARENT,
+      cancelButton->AddRule(jui_helper::LAYOUT_PARAMETER_CENTER_IN_PARENT,
                       jui_helper::LAYOUT_PARAMETER_TRUE);
-      button->AddRule(jui_helper::LAYOUT_PARAMETER_BELOW, currentButton);
-      dialog_->AddView(button);
-      currentButton = button;
+      cancelButton->AddRule(jui_helper::LAYOUT_PARAMETER_BELOW, currentButton);
+      dialog_->AddView(cancelButton);
+      currentButton = cancelButton;
     }
 
     if (rematch) {
       LOGI("Adding rematch button");
       // Leave Button
-      jui_helper::JUIButton *button = new jui_helper::JUIButton("Rematch");
-      button->SetCallback(
+      jui_helper::JUIButton *rematchButton = new jui_helper::JUIButton("Rematch");
+      rematchButton->SetCallback(
           [this](jui_helper::JUIView * view, const int32_t message) {
         switch (message) {
         case jui_helper::JUICALLBACK_BUTTON_UP: {
@@ -475,11 +475,11 @@ void Engine::ManageGame(gpg::TurnBasedMatch const &match, const bool leave,
         }
         }
       });
-      button->AddRule(jui_helper::LAYOUT_PARAMETER_CENTER_IN_PARENT,
+      rematchButton->AddRule(jui_helper::LAYOUT_PARAMETER_CENTER_IN_PARENT,
                       jui_helper::LAYOUT_PARAMETER_TRUE);
-      button->AddRule(jui_helper::LAYOUT_PARAMETER_BELOW, currentButton);
-      dialog_->AddView(button);
-      currentButton = button;
+      rematchButton->AddRule(jui_helper::LAYOUT_PARAMETER_BELOW, currentButton);
+      dialog_->AddView(rematchButton);
+      currentButton = rematchButton;
     }
 
     dialog_->SetCallback(
@@ -508,9 +508,9 @@ void Engine::ManageGame(gpg::TurnBasedMatch const &match, const bool leave,
  * Parse JSON match data
  */
 void Engine::ParseMatchData() {
-  LOGI("Parsing match data %d", current_match_.Data().size());
+  LOGI("Parsing match data %ld", current_match_.Data().size());
   turn_counter_ = 1;
-  if (current_match_.HasData() == false && current_match_.Data().size() == 0) {
+  if (!current_match_.HasData() || current_match_.Data().size() == 0) {
     LOGI("Game data not found");
     return;
   }
@@ -565,11 +565,11 @@ std::vector<uint8_t> Engine::SetupMatchData() {
   auto end = dest.end();
   while (it != end) {
     uint16_t i = *it++;
-    v.push_back(i & 0xff);
-    v.push_back(i >> 8);
+    v.push_back( (unsigned char)(i & 0x0ff));
+    v.push_back((unsigned char) i >> 8);
   }
 
-  LOGI("Created Game Data: size: %d", v.size());
+  LOGI("Created Game Data: size: %ld", v.size());
   return v;
 }
 

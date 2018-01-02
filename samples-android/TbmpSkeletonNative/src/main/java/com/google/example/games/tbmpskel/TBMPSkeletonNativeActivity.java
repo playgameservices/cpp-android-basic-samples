@@ -26,7 +26,7 @@ import android.view.View;
 public class TBMPSkeletonNativeActivity extends NativeActivity {
     // Load SO
     static {
-        System.load("libTBMPSkeletonNativeActivity.so");
+        System.loadLibrary("TBMPSkeletonNativeActivity");
     }
 
     @Override

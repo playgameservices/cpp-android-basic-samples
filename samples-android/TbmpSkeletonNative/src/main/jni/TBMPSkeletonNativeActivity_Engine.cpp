@@ -249,10 +249,8 @@ void Engine::SetState(android_app *state) {
 }
 
 bool Engine::IsReady() {
-  if (has_focus_)
-    return true;
+  return has_focus_;
 
-  return false;
 }
 
 void Engine::TransformPosition(ndk_helper::Vec2 &vec) {
@@ -281,8 +279,6 @@ Engine g_engine;
  * event loop for receiving input events and doing other things.
  */
 void android_main(android_app *state) {
-  app_dummy();
-
   g_engine.SetState(state);
 
   // Init helper functions

@@ -60,11 +60,6 @@
 const int32_t MIN_PLAYERS = 1;
 const int32_t MAX_PLAYERS = 3;
 
-enum NEXT_PARTICIPANT {
-  NEXT_PARTICIPANT_AUTOMATCH = -1,
-  NEXT_PARTICIPANT_NONE = -2,
-};
-
 /*
  * Engine class of the sample
  */
@@ -86,7 +81,6 @@ public:
   // Event handling
   static void HandleCmd(struct android_app *app, int32_t cmd);
   static int32_t HandleInput(android_app *app, AInputEvent *event);
-  void UpdatePosition(AInputEvent *event, int32_t iIndex, float &fX, float &fY);
 
   // Engine life cycles
   Engine();
