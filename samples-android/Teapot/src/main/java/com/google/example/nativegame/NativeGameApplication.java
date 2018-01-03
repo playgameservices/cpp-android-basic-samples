@@ -17,14 +17,11 @@
 package com.google.example.nativegame;
 
 import android.app.Application;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
-import android.widget.Toast;
 
 public class NativeGameApplication extends Application {
     public void onCreate(){
+        super.onCreate();
         Log.w("native-activity", "onCreate");
     }
 }

@@ -15,31 +15,10 @@
 
 #include "StateManager.h"
 
-#ifdef __APPLE__
-// Logging for CoreFoundation
-#include <CoreFoundation/CoreFoundation.h>
-
-extern "C" void NSLog(CFStringRef format, ...);
-const int32_t BUFFER_SIZE = 256;
-
-// Wrap macro in do/while to ensure ;
-#define LOGI(...) do { \
-    char c[BUFFER_SIZE]; \
-    snprintf(c, BUFFER_SIZE, __VA_ARGS__); \
-    CFStringRef str = CFStringCreateWithCString(kCFAllocatorDefault, c, \
-                                                kCFStringEncodingMacRoman); \
-    NSLog(str); \
-    CFRelease(str); \
-  } while (false)
-
-#else
-
 #include "android/log.h"
 #define DEBUG_TAG "TeapotNativeActivity"
 #define LOGI(...) \
     ((void)__android_log_print(ANDROID_LOG_INFO, DEBUG_TAG, __VA_ARGS__))
-
-#endif
 
 bool StateManager::is_auth_in_progress_ = false;
 std::unique_ptr<gpg::GameServices> StateManager::game_services_;
@@ -116,7 +95,7 @@ void StateManager::InitServices(
   if (!game_services_) {
     LOGI("Uninitialized services, so creating");
     game_services_ = gpg::GameServices::Builder()
-        .SetLogging(gpg::DEFAULT_ON_LOG, gpg::LogLevel::VERBOSE)
+        .SetOnLog(gpg::DEFAULT_ON_LOG, gpg::LogLevel::VERBOSE)
         .SetOnAuthActionStarted([started_callback](gpg::AuthOperation op) {
           is_auth_in_progress_ = true;
           started_callback(op);

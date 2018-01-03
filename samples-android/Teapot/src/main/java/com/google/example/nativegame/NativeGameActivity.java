@@ -16,9 +16,11 @@
 
 package com.google.example.nativegame;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.NativeActivity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,6 +30,8 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
+import java.util.Locale;
 
 public class NativeGameActivity extends NativeActivity {
     @Override
@@ -62,7 +66,8 @@ public class NativeGameActivity extends NativeActivity {
         }
         else if(SDK_INT >= 14 && SDK_INT < 19)
         {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LOW_PROFILE);
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LOW_PROFILE);
         }
         else if(SDK_INT >= 19)
         {
@@ -72,6 +77,7 @@ public class NativeGameActivity extends NativeActivity {
     }
     // Our popup window, you will call it from your C/C++ code later
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     void setImmersiveSticky() {
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -99,22 +105,27 @@ public class NativeGameActivity extends NativeActivity {
                 LayoutInflater layoutInflater
                 = (LayoutInflater)getBaseContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
-                View popupView = layoutInflater.inflate(R.layout.widgets, null);
-                _popupWindow = new PopupWindow(
-                        popupView,
-                        LayoutParams.WRAP_CONTENT,
-                        LayoutParams.WRAP_CONTENT);
+                if (layoutInflater != null) {
+                    View popupView = layoutInflater.inflate(R.layout.widgets, null);
+                    _popupWindow = new PopupWindow(
+                            popupView,
+                            LayoutParams.WRAP_CONTENT,
+                            LayoutParams.WRAP_CONTENT);
 
-                LinearLayout mainLayout = new LinearLayout(_activity);
-                MarginLayoutParams params = new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-                params.setMargins(0, 0, 0, 0);
-                _activity.setContentView(mainLayout, params);
+                    LinearLayout mainLayout = new LinearLayout(_activity);
+                    MarginLayoutParams params = new MarginLayoutParams(LayoutParams.WRAP_CONTENT,
+                            LayoutParams.WRAP_CONTENT);
+                    params.setMargins(0, 0, 0, 0);
+                    _activity.setContentView(mainLayout, params);
 
-                // Show our UI over NativeActivity window
-                _popupWindow.showAtLocation(mainLayout, Gravity.TOP | Gravity.LEFT, 10, 10);
-                _popupWindow.update();
+                    // Show our UI over NativeActivity window
+                    _popupWindow.showAtLocation(mainLayout, Gravity.TOP | Gravity.START, 10, 10);
+                    _popupWindow.update();
 
-                _label = (TextView)popupView.findViewById(R.id.textViewFPS);
+                    _label = popupView.findViewById(R.id.textViewFPS);
+                } else {
+                    throw new IllegalStateException("Cannot get layout service!");
+                }
 
             }});
     }
@@ -128,7 +139,7 @@ public class NativeGameActivity extends NativeActivity {
         this.runOnUiThread(new Runnable()  {
             @Override
             public void run()  {
-                _label.setText(String.format("%2.2f FPS", fFPS));
+                _label.setText(String.format(Locale.getDefault(),"%2.2f FPS", fFPS));
 
             }});
     }

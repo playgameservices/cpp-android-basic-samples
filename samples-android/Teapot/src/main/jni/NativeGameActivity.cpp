@@ -43,7 +43,7 @@
 // Class name of JUIhelper function
 #define JUIHELPER_CLASS_NAME "com.sample.helper.JUIHelper"
 // Share object name of helper function library
-#define HELPER_CLASS_SONAME "NativeGameActivity"
+#define HELPER_CLASS_SONAME "teapot"
 
 //------------------------------------------------------------------------------
 // Shared state for our app.
@@ -103,6 +103,8 @@ Engine::Engine()
       button_sign_in_(nullptr), status_text_(nullptr) {
   gl_context_ = ndk_helper::GLContext::GetInstance();
 }
+
+
 
 Engine::~Engine() {
   jui_helper::JUIWindow::GetInstance()->Close();
@@ -531,7 +533,6 @@ void Engine::OnAuthActionFinished(gpg::AuthOperation op,
 // android_native_app_glue.  It runs in its own thread, with its own
 // event loop for receiving input events and doing other things.
 void android_main(android_app *state) {
-  app_dummy();
 
   g_engine.SetState(state);
 
@@ -544,7 +545,7 @@ void android_main(android_app *state) {
   state->onInputEvent = Engine::HandleInput;
 
 #ifdef USE_NDK_PROFILER
-  monstartup("libTeapotNativeActivity.so");
+  monstartup("libteapot.so");
 #endif
 
   // We could initialize in the JNI_OnLoad, but it's also valid here.
