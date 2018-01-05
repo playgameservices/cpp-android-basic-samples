@@ -23,9 +23,9 @@
  * Ctor
  */
 Engine::Engine()
-    : initialized_resources_(false), has_focus_(false), authorizing_(false),
-      app_(nullptr), dialog_(nullptr), textViewFPS_(nullptr),
-      button_sign_in_(nullptr), status_text_(nullptr), button_invite_(nullptr) {
+    :  authorizing_(false), initialized_resources_(false), has_focus_(false),
+       textViewFPS_(nullptr), app_(nullptr), dialog_(nullptr),
+      button_sign_in_(nullptr), button_invite_(nullptr), status_text_(nullptr) {
   gl_context_ = ndk_helper::GLContext::GetInstance();
 }
 

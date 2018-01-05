@@ -127,7 +127,7 @@ void Engine::ShowSnapshotSelectUI() {
 void Engine::SaveSnapshot() {
   EnableUI(false);
   std::string fileName;
-  if (current_snapshot_.Valid() == false) {
+  if (!current_snapshot_.Valid()) {
     fileName = GenerateSaveFileName();
     LOGI("Creating new snapshot %s", fileName.c_str());
   } else {
@@ -382,11 +382,11 @@ std::vector<uint8_t> Engine::SetupSnapshotData() {
   auto it = source.begin();
   auto end = source.end();
   while (it != end) {
-    uint8_t i = *it++;
+    uint8_t i = static_cast<uint8_t>(*it++);
     v.push_back(i);
   }
 
-  LOGI("Created Game Data: size: %ld", v.size());
+  LOGI("Created Game Data: size: %d", static_cast<int>(v.size()));
   return v;
 }
 

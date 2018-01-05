@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 #include <json/reader.h>
 #include <json/value.h>
 #include <utility>
@@ -6,10 +22,6 @@
 #include <cstring>
 #include <iostream>
 #include <stdexcept>
-
-#if _MSC_VER >= 1400 // VC++ 8.0
-#pragma warning( disable : 4996 )   // disable warning about strdup being deprecated.
-#endif
 
 namespace Json {
 
@@ -87,8 +99,8 @@ static std::string codePointToUTF8(unsigned int cp)
    {
       result.resize(3);
       result[2] = static_cast<char>(0x80 | (0x3f & cp));
-      result[1] = 0x80 | static_cast<char>((0x3f & (cp >> 6)));
-      result[0] = 0xE0 | static_cast<char>((0xf & (cp >> 12)));
+      result[1] = static_cast<char>(0x80 | static_cast<char>((0x3f & (cp >> 6))));
+      result[0] = static_cast<char>(0xE0 | static_cast<char>((0xf & (cp >> 12))));
    }
    else if (cp <= 0x10FFFF)
    {
@@ -622,7 +634,7 @@ Reader::decodeDouble( Token &token )
    double value = 0;
    const int bufferSize = 32;
    int count;
-   int length = int(token.end_ - token.start_);
+   size_t length = token.end_ - token.start_;
    if ( length <= bufferSize )
    {
       Char buffer[bufferSize];
@@ -773,7 +785,7 @@ Reader::addError( const std::string &message,
 bool
 Reader::recoverFromError( TokenType skipUntilToken )
 {
-   int errorCount = int(errors_.size());
+   unsigned long errorCount = errors_.size();
    Token skip;
    while ( true )
    {
@@ -875,9 +887,7 @@ Reader::getFormatedErrorMessages() const
 std::istream& operator>>( std::istream &sin, Value &root )
 {
     Json::Reader reader;
-    bool ok = reader.parse(sin, root, true);
-    //JSON_ASSERT( ok );
-    //if (!ok) throw std::runtime_error(reader.getFormatedErrorMessages());
+    reader.parse(sin, root, true);
     return sin;
 }
 

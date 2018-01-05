@@ -68,7 +68,7 @@ void Engine::InitGooglePlayGameServices() {
              LOGI("MultiplayerInvitationEvent callback");
 
              if (event ==
-                 gpg::TurnBasedMultiplayerEvent::UPDATED_FROM_APP_LAUNCH) {
+                 gpg::MultiplayerEvent::UPDATED_FROM_APP_LAUNCH) {
 
                // In this case, an invitation has been accepted already
                // in notification or in Play game app
@@ -282,7 +282,7 @@ void Engine::BroadcastScore(bool bFinal) {
  * Got message from peers
  * room : The room which from_participant is in.
  * from_participant : The participant who sent the data.
- * data : The data which was recieved.
+ * data : The data which was received.
  * is_reliable : Whether the data was sent using the unreliable or
  *                    reliable mechanism.
  * In this app, packet format is defined as:
@@ -296,13 +296,13 @@ void Engine::OnDataReceived(gpg::RealTimeRoom const &room,
     // Got final score
     players_score_[from_participant.Id()].score = data[1];
     players_score_[from_participant.Id()].finished = true;
-    LOGI("Got final data from Dispname:%s ID:%s",
+    LOGI("Got final data from name:%s ID:%s",
          from_participant.DisplayName().c_str(), from_participant.Id().c_str());
   } else if (data[0] == 'U' && !is_reliable) {
     // Got current score
     uint8_t score = players_score_[from_participant.Id()].score;
     players_score_[from_participant.Id()].score = std::max(score, data[1]);
-    LOGI("Got data from Dispname:%s ID:%s",
+    LOGI("Got data from name:%s ID:%s",
          from_participant.DisplayName().c_str(), from_participant.Id().c_str());
   }
   UpdateScore();
@@ -449,7 +449,7 @@ void Engine::UpdateScore() {
   // gpg callback tread and UI callback thread
   std::lock_guard<std::mutex> lock(mutex_);
 
-  int32_t SIZE = 64;
+  size_t SIZE = 64;
   char str[SIZE];
   snprintf(str, SIZE, "%03d", score_counter_);
   std::string str_myscore(str);
@@ -461,7 +461,7 @@ void Engine::UpdateScore() {
   // Append other player
   std::vector<gpg::MultiplayerParticipant> participants = room_.Participants();
   for (gpg::MultiplayerParticipant participant : participants) {
-    LOGI("Participant Dispname:%s ID:%s", participant.DisplayName().c_str(),
+    LOGI("Participant name:%s ID:%s", participant.DisplayName().c_str(),
          participant.Id().c_str());
     if (participant.HasPlayer())
       LOGI("self:%s PlayerID:%s", self_id_.c_str(),
@@ -487,10 +487,8 @@ void Engine::UpdateScore() {
   // Update game UI, UI update needs to be performed in UI thread
   ndk_helper::JNIHelper::GetInstance()
       ->RunOnUiThread([this, str_myscore, allstr]() {
-          my_score_text_->SetAttribute(
-              "Text", const_cast<const char *>(str_myscore.c_str()));
-          scores_text_->SetAttribute("Text",
-                                     const_cast<const char *>(allstr.c_str()));
+          my_score_text_->SetAttribute("Text", str_myscore.c_str());
+          scores_text_->SetAttribute("Text", allstr.c_str());
         });
 }
 
@@ -498,7 +496,7 @@ void Engine::UpdateScore() {
  * Update game timer and game UI
  */
 bool Engine::UpdateTime() {
-  // UpdateTime() is invoked from other thread asynchrnously
+  // UpdateTime() is invoked from other thread asynchronously
   // So need to Lock mutex
   std::lock_guard<std::mutex> lock(mutex_);
 
@@ -511,15 +509,14 @@ bool Engine::UpdateTime() {
     // finish game
     playing_ = false;
     current_time = GAME_DURATION;
-    ndk_helper::JNIHelper::GetInstance()->RunOnUiThread([this, current_time]() {
+    ndk_helper::JNIHelper::GetInstance()->RunOnUiThread([this]() {
       button_play_->SetAttribute("Enabled", false);
     });
   }
 
   // Update game UI, UI update needs to be performed in UI thread
   ndk_helper::JNIHelper::GetInstance()->RunOnUiThread([this, current_time]() {
-    // LOGI("Updating time %f", current_time);
-    int32_t SIZE = 64;
+    size_t SIZE = 64;
     char str[SIZE];
     snprintf(str, SIZE, "0:%02.0f", GAME_DURATION - current_time);
     time_text_->SetAttribute("Text", const_cast<const char *>(str));

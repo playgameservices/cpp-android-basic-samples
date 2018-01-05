@@ -39,7 +39,7 @@ void OnAuthActionStarted(gpg::AuthOperation op) {
   }
 }
 
-gpg::GameServices *StateManager::GetGameServices() {
+gpg::GameServices* StateManager::GetGameServices() {
   return game_services_.get();
 }
 
@@ -74,14 +74,14 @@ void StateManager::SubmitHighScore(char const *leaderboard_id, uint64_t score) {
 void StateManager::ShowAchievements() {
   if (game_services_->IsAuthorized()) {
     LOGI("Show achievement");
-    game_services_->Achievements().ShowAllUI();
+    game_services_->Achievements().ShowAllUI([](gpg::UIStatus status){});
   }
 }
 
 void StateManager::ShowLeaderboard(char const *leaderboard_id) {
   if (game_services_->IsAuthorized()) {
     LOGI("Show achievement");
-    game_services_->Leaderboards().ShowUI(leaderboard_id);
+    game_services_->Leaderboards().ShowUI(leaderboard_id,[](gpg::UIStatus status){});
   }
 }
 

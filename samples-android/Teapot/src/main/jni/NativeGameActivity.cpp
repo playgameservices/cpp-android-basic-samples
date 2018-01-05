@@ -99,8 +99,8 @@ class Engine {
 Engine g_engine;
 
 Engine::Engine()
-    : initialized_resources_(false), has_focus_(false), app_(nullptr),
-      button_sign_in_(nullptr), status_text_(nullptr) {
+    : initialized_resources_(false), has_focus_(false),
+      button_sign_in_(nullptr), status_text_(nullptr), app_(nullptr) {
   gl_context_ = ndk_helper::GLContext::GetInstance();
 }
 
@@ -132,7 +132,7 @@ void Engine::InitUI() {
   button_sign_in_->AddRule(jui_helper::LAYOUT_PARAMETER_CENTER_IN_PARENT,
                            jui_helper::LAYOUT_PARAMETER_TRUE);
   button_sign_in_->SetCallback(
-      [this](jui_helper::JUIView *view, const int32_t message) {
+      [](jui_helper::JUIView *view, const int32_t message) {
         LOGI("button_sign_in_ click: %d", message);
         if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
           if (StateManager::GetGameServices()->IsAuthorized()) {
@@ -152,7 +152,7 @@ void Engine::InitUI() {
   button_achievement->AddRule(jui_helper::LAYOUT_PARAMETER_CENTER_IN_PARENT,
                               jui_helper::LAYOUT_PARAMETER_TRUE);
   button_achievement->SetCallback(
-      [this](jui_helper::JUIView *view, const int32_t message) {
+      [](jui_helper::JUIView *view, const int32_t message) {
         LOGI("Button click: %d", message);
         if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
             std::string id = ndk_helper::JNIHelper::GetInstance()->GetStringResource("achievement_prime");
@@ -174,7 +174,7 @@ void Engine::InitUI() {
       jui_helper::LAYOUT_PARAMETER_CENTER_IN_PARENT,
       jui_helper::LAYOUT_PARAMETER_TRUE);
   button_show_achievements_ui->SetCallback(
-      [this](jui_helper::JUIView *view, const int32_t message) {
+      [](jui_helper::JUIView *view, const int32_t message) {
         LOGI("Button click: %d", message);
         if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
           StateManager::ShowAchievements();
@@ -235,7 +235,7 @@ void Engine::InitUI() {
       jui_helper::LAYOUT_PARAMETER_CENTER_IN_PARENT,
       jui_helper::LAYOUT_PARAMETER_TRUE);
   button_show_leaderboard_ui->SetCallback(
-      [this](jui_helper::JUIView *view, const int32_t message) {
+      [](jui_helper::JUIView *view, const int32_t message) {
         LOGI("Button click: %d", message);
         if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
             std::string id = ndk_helper::JNIHelper::GetInstance()->GetStringResource("leaderboard_easy");

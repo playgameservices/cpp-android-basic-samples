@@ -236,12 +236,12 @@ void Engine::LeaveMatch() {
       //Leave a game
     manager.LeaveMatchDuringMyTurn(current_match_,
                                    current_match_.SuggestedNextParticipant(),
-                                   [this](gpg::MultiplayerStatus status) {
+                                   [](gpg::MultiplayerStatus status) {
       LOGI("Left the game");
     });
   } else {
     manager.LeaveMatchDuringTheirTurn(current_match_,
-                                      [this](gpg::MultiplayerStatus status) {
+                                      [](gpg::MultiplayerStatus status) {
       LOGI("Left the game");
     });
   }
@@ -273,7 +273,7 @@ void Engine::TakeTurn(const bool winning, const bool losing) {
   turn_counter_++;
   std::vector<uint8_t> match_data = SetupMatchData();
 
-  //By default, passing through existing participatntResults
+  //By default, passing through existing ParticipantResults
   gpg::ParticipantResults results = current_match_.ParticipantResults();
 
   if (winning) {
@@ -295,7 +295,7 @@ void Engine::TakeTurn(const bool winning, const bool losing) {
     //Take normal turn
   manager.TakeMyTurn(
       current_match_, match_data, results, nextParticipant,
-      [this](gpg::TurnBasedMultiplayerManager::TurnBasedMatchResponse const &
+      [](gpg::TurnBasedMultiplayerManager::TurnBasedMatchResponse const &
              response) {
     LOGI("Took turn");
   });
@@ -335,14 +335,12 @@ void Engine::PlayGame(gpg::TurnBasedMatch const &match) {
     jui_helper::JUIButton *button = new jui_helper::JUIButton("Take Turn");
     button->SetCallback(
         [this](jui_helper::JUIView * view, const int32_t message) {
-      switch (message) {
-      case jui_helper::JUICALLBACK_BUTTON_UP: {
+      if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
         if (checkBoxQuit_->IsChecked())
           LeaveMatch();
         else
           TakeTurn(checkBoxWinning_->IsChecked(), checkBoxLosing_->IsChecked());
         dialog_->Close();
-      }
       }
     });
     button->AddRule(jui_helper::LAYOUT_PARAMETER_CENTER_IN_PARENT,
@@ -352,12 +350,10 @@ void Engine::PlayGame(gpg::TurnBasedMatch const &match) {
     jui_helper::JUIButton *buttonCancel = new jui_helper::JUIButton("Cancel");
     buttonCancel->SetCallback(
         [this](jui_helper::JUIView * view, const int32_t message) {
-      switch (message) {
-      case jui_helper::JUICALLBACK_BUTTON_UP: {
-        CancelMatch();
-        dialog_->Close();
-      }
-      }
+            if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
+              CancelMatch();
+              dialog_->Close();
+            }
     });
     buttonCancel->AddRule(jui_helper::LAYOUT_PARAMETER_CENTER_IN_PARENT,
                           jui_helper::LAYOUT_PARAMETER_TRUE);
@@ -377,7 +373,7 @@ void Engine::PlayGame(gpg::TurnBasedMatch const &match) {
       dialog_->Close();
     });
 
-    int32_t size = 64;
+    size_t size = 64;
     char str[size];
     snprintf(str, size, "Turn %d", turn_counter_);
     dialog_->SetAttribute("Title", (const char *)str);
@@ -408,11 +404,9 @@ void Engine::ManageGame(gpg::TurnBasedMatch const &match, const bool leave,
     jui_helper::JUIButton *button = new jui_helper::JUIButton("Dismiss");
     button->SetCallback(
         [this](jui_helper::JUIView * view, const int32_t message) {
-      switch (message) {
-      case jui_helper::JUICALLBACK_BUTTON_UP: {
-        DismissMatch();
+            if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
+              DismissMatch();
         dialog_->Close();
-      }
       }
     });
     button->AddRule(jui_helper::LAYOUT_PARAMETER_ALIGN_PARENT_TOP,
@@ -428,11 +422,9 @@ void Engine::ManageGame(gpg::TurnBasedMatch const &match, const bool leave,
       jui_helper::JUIButton *leaveButton = new jui_helper::JUIButton("Leave");
       leaveButton->SetCallback(
           [this](jui_helper::JUIView * view, const int32_t message) {
-        switch (message) {
-        case jui_helper::JUICALLBACK_BUTTON_UP: {
-          LeaveMatch();
+              if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
+                LeaveMatch();
           dialog_->Close();
-        }
         }
       });
       leaveButton->AddRule(jui_helper::LAYOUT_PARAMETER_CENTER_IN_PARENT,
@@ -448,11 +440,9 @@ void Engine::ManageGame(gpg::TurnBasedMatch const &match, const bool leave,
       jui_helper::JUIButton *cancelButton = new jui_helper::JUIButton("Cancel");
       cancelButton->SetCallback(
           [this](jui_helper::JUIView * view, const int32_t message) {
-        switch (message) {
-        case jui_helper::JUICALLBACK_BUTTON_UP: {
-          CancelMatch();
+              if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
+                CancelMatch();
           dialog_->Close();
-        }
         }
       });
       cancelButton->AddRule(jui_helper::LAYOUT_PARAMETER_CENTER_IN_PARENT,
@@ -468,18 +458,15 @@ void Engine::ManageGame(gpg::TurnBasedMatch const &match, const bool leave,
       jui_helper::JUIButton *rematchButton = new jui_helper::JUIButton("Rematch");
       rematchButton->SetCallback(
           [this](jui_helper::JUIView * view, const int32_t message) {
-        switch (message) {
-        case jui_helper::JUICALLBACK_BUTTON_UP: {
+              if (message == jui_helper::JUICALLBACK_BUTTON_UP) {
           Rematch();
           dialog_->Close();
-        }
         }
       });
       rematchButton->AddRule(jui_helper::LAYOUT_PARAMETER_CENTER_IN_PARENT,
                       jui_helper::LAYOUT_PARAMETER_TRUE);
       rematchButton->AddRule(jui_helper::LAYOUT_PARAMETER_BELOW, currentButton);
       dialog_->AddView(rematchButton);
-      currentButton = rematchButton;
     }
 
     dialog_->SetCallback(
@@ -495,7 +482,7 @@ void Engine::ManageGame(gpg::TurnBasedMatch const &match, const bool leave,
       dialog_->Close();
     });
 
-    int32_t size = 64;
+    size_t size = 64;
     char str[size];
     snprintf(str, size, "Turn %d", turn_counter_);
     dialog_->SetAttribute("Title", (const char *)str);
@@ -508,7 +495,7 @@ void Engine::ManageGame(gpg::TurnBasedMatch const &match, const bool leave,
  * Parse JSON match data
  */
 void Engine::ParseMatchData() {
-  LOGI("Parsing match data %ld", current_match_.Data().size());
+  LOGI("Parsing match data %d", static_cast<int>(current_match_.Data().size()));
   turn_counter_ = 1;
   if (!current_match_.HasData() || current_match_.Data().size() == 0) {
     LOGI("Game data not found");
@@ -569,7 +556,7 @@ std::vector<uint8_t> Engine::SetupMatchData() {
     v.push_back((unsigned char) i >> 8);
   }
 
-  LOGI("Created Game Data: size: %ld", v.size());
+  LOGI("Created Game Data: size: %d", static_cast<int>(v.size()));
   return v;
 }
 

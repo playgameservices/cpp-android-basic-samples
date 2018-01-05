@@ -93,7 +93,7 @@ static int engine_init_display(struct engine* engine) {
   const EGLint attribs[] = {EGL_SURFACE_TYPE, EGL_WINDOW_BIT, EGL_BLUE_SIZE,
                             8,                EGL_GREEN_SIZE, 8,
                             EGL_RED_SIZE,     8,              EGL_NONE};
-  EGLint w, h, dummy;
+  EGLint w, h;
   EGLint numConfigs;
   EGLConfig config;
   EGLSurface surface;
@@ -180,7 +180,7 @@ static int32_t engine_handle_input(struct android_app* app,
                                    AInputEvent* event) {
   struct engine* engine = (struct engine*)app->userData;
   if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
-    unsigned int flags =
+    int32_t flags =
         AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK;
 
     // gpg-cpp: Sign in or out on tap
@@ -199,8 +199,8 @@ static int32_t engine_handle_input(struct android_app* app,
 
     // Make things pretty
     engine->animating = 1;
-    engine->state.x = AMotionEvent_getX(event, 0);
-    engine->state.y = AMotionEvent_getY(event, 0);
+    engine->state.x = static_cast<int32_t>(AMotionEvent_getX(event, 0));
+    engine->state.y =  static_cast<int32_t>(AMotionEvent_getY(event, 0));
     return 1;
   }
 
@@ -253,6 +253,8 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
       engine->animating = 0;
       engine_draw_frame(engine);
       break;
+      default:
+        LOGI("Ignoring %d", cmd);
   }
 }
 
@@ -277,7 +279,7 @@ void android_main(struct android_app* state) {
   engine.sensorEventQueue = ASensorManager_createEventQueue(
       engine.sensorManager, state->looper, LOOPER_ID_USER, NULL, NULL);
 
-  // gpg-cpp: Set platform intiialization
+  // gpg-cpp: Set platform initialization
   gpg::AndroidInitialization::android_main(state);
 
   // gpg-cpp:  Here we create the callback on auth operations

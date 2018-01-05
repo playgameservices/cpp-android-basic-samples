@@ -23,12 +23,12 @@
 Engine::Engine()
     : initialized_resources_(false),
       has_focus_(false),
+      textViewFPS_(nullptr),
       app_(nullptr),
       dialog_(nullptr),
-      textViewFPS_(nullptr),
       button_sign_in_(nullptr),
-      status_text_(nullptr),
-      button_invite_(nullptr) {
+      button_invite_(nullptr),
+      status_text_(nullptr) {
   gl_context_ = ndk_helper::GLContext::GetInstance();
 }
 
@@ -283,7 +283,6 @@ Engine g_engine;
  * event loop for receiving input events and doing other things.
  */
 void android_main(android_app *state) {
-  app_dummy();
 
   g_engine.SetState(state);
 

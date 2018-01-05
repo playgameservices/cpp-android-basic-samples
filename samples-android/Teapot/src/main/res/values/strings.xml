@@ -17,4 +17,5 @@
 -->
 <resources>
     <string name="app_name">TeapotNativeGame</string>
+    <string name="fps">0.0 FPS</string>
 </resources>

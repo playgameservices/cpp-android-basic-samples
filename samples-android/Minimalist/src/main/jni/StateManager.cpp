@@ -40,7 +40,7 @@ void OnAuthActionStarted(gpg::AuthOperation op) {
   }
 }
 
-gpg::GameServices *StateManager::GetGameServices() {
+gpg::GameServices* StateManager::GetGameServices() {
   return game_services_.get();
 }
 
@@ -75,14 +75,14 @@ void StateManager::SubmitHighScore(char const *leaderboard_id, uint64_t score) {
 void StateManager::ShowAchievements() {
   if (game_services_->IsAuthorized()) {
     LOGI("Show achievement");
-    game_services_->Achievements().ShowAllUI();
+    game_services_->Achievements().ShowAllUI([](const gpg::UIStatus status) {});
   }
 }
 
 void StateManager::ShowLeaderboard(char const *leaderboard_id) {
   if (game_services_->IsAuthorized()) {
     LOGI("Show achievement");
-    game_services_->Leaderboards().ShowUI(leaderboard_id);
+    game_services_->Leaderboards().ShowUI(leaderboard_id, [](const gpg::UIStatus status) {});
   }
 }
 
@@ -113,7 +113,8 @@ void StateManager::InitServices(
             return;
           }
           LOGI("Fetching all blocking");
-          gpg::AchievementManager::FetchAllResponse fetchResponse = game_services_->Achievements().FetchAllBlocking(std::chrono::milliseconds(1000));
+          gpg::AchievementManager::FetchAllResponse fetchResponse =
+                  game_services_->Achievements().FetchAllBlocking(std::chrono::milliseconds(1000));
           LOGI("--------------------------------------------------------------");
 
           LOGI("Fetching all nonblocking");

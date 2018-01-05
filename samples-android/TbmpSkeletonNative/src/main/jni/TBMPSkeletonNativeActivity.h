@@ -142,7 +142,7 @@ private:
   // JUI text view to show FPS
   jui_helper::JUITextView *textViewFPS_;
 
-  // Native acitivity app instance
+  // Native activity app instance
   android_app *app_;
 
   // JUI dialog

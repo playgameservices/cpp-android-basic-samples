@@ -55,13 +55,8 @@ const int32_t MIN_PLAYERS = 1;
 const int32_t MAX_PLAYERS = 3;
 const double GAME_DURATION = 20.0;
 
-enum NEXT_PARTICIPANT {
-  NEXT_PARTICIPANT_AUTOMATCH = -1,
-  NEXT_PARTICIPANT_NONE = -2,
-};
-
 struct PLAYER_STATUS {
-  int32_t score;
+  uint8_t score;
   bool finished;
 };
 /*
@@ -85,7 +80,6 @@ class Engine : public gpg::IRealTimeEventListener {
   // Event handling
   static void HandleCmd(struct android_app *app, int32_t cmd);
   static int32_t HandleInput(android_app *app, AInputEvent *event);
-  void UpdatePosition(AInputEvent *event, int32_t iIndex, float &fX, float &fY);
 
   // Engine life cycles
   Engine();
