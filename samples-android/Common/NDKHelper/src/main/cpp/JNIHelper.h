@@ -218,10 +218,11 @@ public:
    */
   JNIEnv *AttachCurrentThread() {
     JNIEnv *env;
-    if (activity_->vm->GetEnv((void **)&env, JNI_VERSION_1_4) == JNI_OK)
+    if (activity_->vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_4) == JNI_OK)
       return env;
     activity_->vm->AttachCurrentThread(&env, NULL);
-    pthread_key_create((int32_t *)activity_, DetachCurrentThreadDtor);
+    pthread_key_create(
+            reinterpret_cast<pthread_key_t *>(activity_), DetachCurrentThreadDtor);
     return env;
   }
 
@@ -285,7 +286,7 @@ private:
    */
   static void DetachCurrentThreadDtor(void *p) {
     LOGI("detached current thread");
-    ANativeActivity *activity = (ANativeActivity *)p;
+    ANativeActivity *activity = reinterpret_cast<ANativeActivity *>(p);
     activity->vm->DetachCurrentThread();
   }
 

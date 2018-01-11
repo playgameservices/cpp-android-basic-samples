@@ -34,8 +34,8 @@ namespace ndk_helper {
  * Singleton
  */
 JNIHelper *JNIHelper::GetInstance() {
-  static JNIHelper helper;
-  return &helper;
+  static JNIHelper* pHelper = new JNIHelper();
+  return pHelper;
 }
 
 /*
@@ -73,14 +73,14 @@ void JNIHelper::Init(ANativeActivity *activity, const char *helper_class_name) {
   jmethodID midGetPackageName = env->GetMethodID(
       android_content_Context, "getPackageName", "()Ljava/lang/String;");
 
-  jstring packageName = (jstring)
-      env->CallObjectMethod(helper.activity_->clazz, midGetPackageName);
+  jstring packageName = static_cast<jstring>(
+      env->CallObjectMethod(helper.activity_->clazz, midGetPackageName));
   const char *appname = env->GetStringUTFChars(packageName, NULL);
   helper.app_bunlde_name_ = std::string(appname);
 
   //Instantiate JNIHelper class
   jclass cls = helper.RetrieveClass(env, helper_class_name);
-  helper.jni_helper_java_class_ = (jclass) env->NewGlobalRef(cls);
+  helper.jni_helper_java_class_ = static_cast<jclass>(env->NewGlobalRef(cls));
 
   jmethodID constructor =
       env->GetMethodID(helper.jni_helper_java_class_, "<init>",
@@ -91,8 +91,8 @@ void JNIHelper::Init(ANativeActivity *activity, const char *helper_class_name) {
   helper.jni_helper_java_ref_ = env->NewGlobalRef(helper.jni_helper_java_ref_);
 
   //Get app label
-  jstring labelName = (jstring)
-      helper.CallObjectMethod("getApplicationName", "()Ljava/lang/String;");
+  jstring labelName = static_cast<jstring>(
+      helper.CallObjectMethod("getApplicationName", "()Ljava/lang/String;"));
   const char *label = env->GetStringUTFChars(labelName, NULL);
   helper.app_label_ = std::string(label);
 
@@ -158,9 +158,9 @@ bool JNIHelper::ReadFile(const char *fileName,
   if (f) {
     LOGI("reading:%s", s.c_str());
     f.seekg(0, std::ifstream::end);
-    int32_t fileSize = f.tellg();
+    long long int fileSize = f.tellg();
     f.seekg(0, std::ifstream::beg);
-    buffer_ref->reserve(fileSize);
+    buffer_ref->reserve(static_cast<unsigned long>(fileSize));
     buffer_ref->assign(std::istreambuf_iterator<char>(f),
                        std::istreambuf_iterator<char>());
     f.close();
@@ -173,8 +173,8 @@ bool JNIHelper::ReadFile(const char *fileName,
     if (!assetFile) {
       return false;
     }
-    uint8_t *data = (uint8_t *)AAsset_getBuffer(assetFile);
-    int32_t size = AAsset_getLength(assetFile);
+    const uint8_t *data = static_cast<const uint8_t*>(AAsset_getBuffer(assetFile));
+    size_t size = static_cast<size_t>(AAsset_getLength(assetFile));
     if (data == NULL) {
       AAsset_close(assetFile);
 
@@ -250,11 +250,11 @@ uint32_t JNIHelper::LoadTexture(const char *file_name, int32_t *outWidth,
   int32_t height = env->GetIntField(out, fidHeight);
   if (!ret) {
     glDeleteTextures(1, &tex);
-    tex = -1;
+    tex = 0xffff;
     LOGI("Texture load failed %s", file_name);
   }
   LOGI("Loaded texture original size:%dx%d alpha:%d", width, height,
-       (int32_t) alpha);
+       static_cast<int32_t>(alpha));
   if (outWidth != NULL) {
     *outWidth = width;
   }
@@ -287,16 +287,16 @@ std::string JNIHelper::ConvertString(const char *str, const char *encode) {
   JNIEnv *env = AttachCurrentThread();
   env->PushLocalFrame(16);
 
-  int32_t iLength = strlen((const char *)str);
+  jsize iLength = static_cast<jsize>(strlen(str));
 
   jbyteArray array = env->NewByteArray(iLength);
-  env->SetByteArrayRegion(array, 0, iLength, (const signed char *)str);
+  env->SetByteArrayRegion(array, 0, iLength, reinterpret_cast<const jbyte*>(str));
 
   jstring strEncode = env->NewStringUTF(encode);
 
   jclass cls = env->FindClass("java/lang/String");
   jmethodID ctor = env->GetMethodID(cls, "<init>", "([BLjava/lang/String;)V");
-  jstring object = (jstring) env->NewObject(cls, ctor, array, strEncode);
+  jstring object = static_cast<jstring>(env->NewObject(cls, ctor, array, strEncode));
 
   const char *cparam = env->GetStringUTFChars(object, NULL);
 
@@ -332,8 +332,8 @@ std::string JNIHelper::GetStringResource(const std::string& resourceName)
   JNIEnv *env = AttachCurrentThread();
   jstring name = env->NewStringUTF(resourceName.c_str());
 
-  jstring ret = (jstring)
-      CallObjectMethod("getStringResource", "(Ljava/lang/String;)Ljava/lang/String;", name);
+  jstring ret = static_cast<jstring>(
+      CallObjectMethod("getStringResource", "(Ljava/lang/String;)Ljava/lang/String;", name));
 
   const char *resource = env->GetStringUTFChars(ret, NULL);
   std::string s = std::string(resource);
@@ -389,7 +389,7 @@ jclass JNIHelper::RetrieveClass(JNIEnv *jni, const char *class_name) {
 
   jstring str_class_name = jni->NewStringUTF(class_name);
   jclass class_retrieved =
-      (jclass) jni->CallObjectMethod(cls, find_class, str_class_name);
+      static_cast<jclass>(jni->CallObjectMethod(cls, find_class, str_class_name));
   jni->DeleteLocalRef(str_class_name);
   jni->DeleteLocalRef(activity_class);
   jni->DeleteLocalRef(class_loader);
@@ -411,7 +411,7 @@ jstring JNIHelper::GetExternalFilesDirJString(JNIEnv *env) {
   jclass cls_File = env->FindClass("java/io/File");
   jmethodID mid_getPath =
       env->GetMethodID(cls_File, "getPath", "()Ljava/lang/String;");
-  jstring obj_Path = (jstring) env->CallObjectMethod(obj_File, mid_getPath);
+  jstring obj_Path = static_cast<jstring>(env->CallObjectMethod(obj_File, mid_getPath));
 
   return obj_Path;
 }
@@ -622,7 +622,7 @@ void JNIHelper::RunOnUiThread(std::function<void()> callback) {
 
   // Allocate temporary function object to be passed around
   std::function<void()> *pCallback = new std::function<void()>(callback);
-  env->CallVoidMethod(jni_helper_java_ref_, mid, (int64_t) pCallback);
+  env->CallVoidMethod(jni_helper_java_ref_, mid, reinterpret_cast<int64_t>(pCallback));
 }
 
 // This JNI function is invoked from UIThread asynchronously
@@ -630,7 +630,9 @@ extern "C" {
 JNIEXPORT void
 Java_com_sample_helper_NDKHelper_RunOnUiThreadHandler(JNIEnv *env, jobject thiz,
                                                       int64_t pointer) {
-  std::function<void()> *pCallback = (std::function<void()> *)pointer;
+#pragma unused (env)
+#pragma unused (thiz)
+  std::function<void()> *pCallback = reinterpret_cast< std::function<void()> *>(pointer);
   (*pCallback)();
 
   // Deleting temporary object

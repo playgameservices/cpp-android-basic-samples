@@ -37,7 +37,7 @@ allprojects {
       // As the plugin has created the build tasks, add the gpg-sdk task to
       // the task dependencies so it gets done before compiling
       tasks.whenTaskAdded {
-    task->project(':Common:gpg-sdk').defaultTasks.each {
+    task-> if (!task.name.endsWith("clean")) project(':Common:gpg-sdk').defaultTasks.each {
       t->task.dependsOn project(':Common:gpg-sdk').tasks[t]
     }
   }

@@ -49,7 +49,7 @@ void GLContext::InitGLES() {
   //
   //Initialize OpenGL ES 3 if available
   //
-  const char *versionStr = (const char *)glGetString(GL_VERSION);
+  const char *versionStr = reinterpret_cast<const char*>(glGetString(GL_VERSION));
   if (strstr(versionStr, "OpenGL ES 3.") && gl3stubInit()) {
     es3_supported_ = true;
     gl_version_ = 3.0f;
@@ -92,7 +92,7 @@ bool GLContext::InitEGLSurface() {
    * Below, we select an EGLConfig with at least 8 bits per color
    * component compatible with on-screen windows
    */
-  const EGLint attribs[] = { EGL_RENDERABLE_TYPE,
+  const EGLint attribs0[] = { EGL_RENDERABLE_TYPE,
                              EGL_OPENGL_ES2_BIT, //Request opengl ES2.0
                              EGL_SURFACE_TYPE, EGL_WINDOW_BIT, EGL_BLUE_SIZE, 8,
                              EGL_GREEN_SIZE, 8, EGL_RED_SIZE, 8, EGL_DEPTH_SIZE,
@@ -101,7 +101,7 @@ bool GLContext::InitEGLSurface() {
   depth_size_ = 24;
 
   EGLint num_configs;
-  eglChooseConfig(display_, attribs, &config_, 1, &num_configs);
+  eglChooseConfig(display_, attribs0, &config_, 1, &num_configs);
 
   if (msaa_size_ > 1 && !num_configs) {
     LOGW("No EGL config with MSAA");

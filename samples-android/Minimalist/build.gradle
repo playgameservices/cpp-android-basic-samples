@@ -31,9 +31,10 @@ android {
 
         externalNativeBuild {
             cmake {
-                cppFlags "-std=c++11 -Wall -frtti"
+                cppFlags "-std=c++11 -frtti -Wall -Werror"
                 arguments "-DGPG_SDK_PATH=${project(':Common:gpg-sdk').projectDir}/gpg-cpp-sdk/android",
-                    "-DANDROID_STL=c++_static"
+                    "-DANDROID_STL=c++_static",
+                    "-DANDROID_TOOLCHAIN=clang"
             }
         }
     }

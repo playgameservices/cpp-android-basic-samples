@@ -24,10 +24,11 @@ android {
 
     externalNativeBuild {
       cmake {
-        cppFlags "-std=c++11 -Wall -frtti"
+        cppFlags "-std=c++11 -frtti -Wall -Werror"
         targets "juihelper"
-        arguments "-DANDROID_STL=c++_static",
-            "-DNDK_HELPER_PATH=${project(':Common:NDKHelper').projectDir}"
+        arguments "-DNDK_HELPER_PATH=${project(':Common:NDKHelper').projectDir}",
+                  "-DANDROID_STL=c++_static",
+                  "-DANDROID_TOOLCHAIN=clang"
       }
     }
   }

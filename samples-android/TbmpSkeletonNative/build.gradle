@@ -31,13 +31,14 @@ android {
 
         externalNativeBuild {
             cmake {
-                cppFlags "-std=c++11 -Wall -frtti"
+                cppFlags "-std=c++11 -frtti -Wall -Werror"
                 arguments "-DJUI_HELPER_PATH=${project(':Common:JuiHelper').projectDir}" ,
                         "-DNDK_HELPER_PATH=${project(':Common:NDKHelper').projectDir}" ,
                         "-DGPG_SDK_PATH=${project(':Common:gpg-sdk').projectDir}/gpg-cpp-sdk/android",
                         "-DJSON_PATH=${project(':Common:gpg-sdk').projectDir}/../external/jsoncpp/",
                         "-DTEAPOT_RENDERER_PATH=${project(':Common').projectDir}/TeapotRenderer" ,
-                        "-DANDROID_STL=c++_static"
+                        "-DANDROID_STL=c++_static",
+                        "-DANDROID_TOOLCHAIN=clang"
             }
 
         }
