@@ -39,8 +39,8 @@ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_o
 
 add_library(teapot
              SHARED
-             src/main/jni/NativeGameActivity.cpp
-             src/main/jni/StateManager.cpp
+             src/main/cpp/NativeGameActivity.cpp
+             src/main/cpp/StateManager.cpp
              ${TEAPOT_RENDERER_PATH}/TeapotRenderer.cpp
            )
 

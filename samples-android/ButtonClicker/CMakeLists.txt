@@ -57,8 +57,8 @@ add_library( # Sets the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
-             src/main/jni/ButtonClickerNativeActivity.cpp
-             src/main/jni/ButtonClickerNativeActivity_Engine.cpp
+             src/main/cpp/ButtonClickerNativeActivity.cpp
+             src/main/cpp/ButtonClickerNativeActivity_Engine.cpp
              ${TEAPOT_RENDERER_PATH}/TeapotRenderer.cpp
            )
 

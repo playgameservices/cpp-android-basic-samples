@@ -51,8 +51,8 @@ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_o
 
 add_library(TBMPSkeletonNativeActivity
              SHARED
-             src/main/jni/TBMPSkeletonNativeActivity.cpp
-             src/main/jni/TBMPSkeletonNativeActivity_Engine.cpp
+             src/main/cpp/TBMPSkeletonNativeActivity.cpp
+             src/main/cpp/TBMPSkeletonNativeActivity_Engine.cpp
              ${TEAPOT_RENDERER_PATH}/TeapotRenderer.cpp
            )
 

@@ -29,8 +29,8 @@ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_o
 
 add_library(native-activity
              SHARED
-             src/main/jni/main.cpp
-             src/main/jni/StateManager.cpp
+             src/main/cpp/main.cpp
+             src/main/cpp/StateManager.cpp
            )
 
 target_include_directories(native-activity PRIVATE

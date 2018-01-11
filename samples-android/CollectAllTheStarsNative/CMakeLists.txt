@@ -63,8 +63,8 @@ add_library( # Sets the name of the library.
              # Sets the library as a shared library.
              SHARED
              # Provides a relative path to your source file(s).
-            src/main/jni/CollectAllTheStarsNativeActivity.cpp
-            src/main/jni/CollectAllTheStarsNativeActivity_Engine.cpp
+            src/main/cpp/CollectAllTheStarsNativeActivity.cpp
+            src/main/cpp/CollectAllTheStarsNativeActivity_Engine.cpp
             ${TEAPOT_RENDERER_PATH}/TeapotRenderer.cpp
            )
 
