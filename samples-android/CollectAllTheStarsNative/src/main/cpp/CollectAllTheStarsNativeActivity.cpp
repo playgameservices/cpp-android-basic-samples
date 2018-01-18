@@ -197,7 +197,7 @@ Engine::ResolveConflicts(gpg::SnapshotManager::OpenResponse const &originalRespo
       manager.OpenBlocking(originalResponse.conflict_original.FileName(),
                            gpg::SnapshotConflictPolicy::MANUAL);
   gpg::SnapshotManager::ReadResponse responseReadBase =
-      manager.ReadBlocking(responseBase.data);
+      manager.ReadBlocking(responseBase.conflict_original);
   ParseSnapshotData(responseReadBase.data);
 
   // Temporary store data,
@@ -211,7 +211,7 @@ Engine::ResolveConflicts(gpg::SnapshotManager::OpenResponse const &originalRespo
       manager.OpenBlocking(originalResponse.conflict_unmerged.FileName(),
                            gpg::SnapshotConflictPolicy::MANUAL);
   gpg::SnapshotManager::ReadResponse responseReadRemote =
-      manager.ReadBlocking(responseRemote.data);
+      manager.ReadBlocking(responseRemote.conflict_unmerged);
   ParseSnapshotData(responseReadRemote.data);
 
   // Merging them
