@@ -14,8 +14,6 @@ These samples illustrate how to use Google Play Game Services with your Android 
 
 * **Teapots**: Demonstrates use of the Leaderboard and Achievement APIs.
 
-**Note:** In samples with corresponding counterparts for iOS and Web (particularly, CollectAllTheStars and TypeANumber), the player can play a game seamlessly across phones of different platforms. For example, you can play some levels of CollectAllTheStars on your Android device, and then pick up your iOS device and continue where you left off! TypeANumber shows your achievements and leaderboards on all platforms; when you make progress on one platform, that progress is reflected on the other devices, as well.
-
 Pre-requisites
 --------------
 1. Change the applicationId inside each individual samples build.gradle to your own package name
