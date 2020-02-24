@@ -4,8 +4,6 @@ These samples illustrate how to use Google Play Game Services with your Android 
 
 * **CollectAllTheStarsNative**: Demonstrates how to use the Saved Games feature to save game data. The sample signs the user in, synchronizes their data from a named game save, and then updates the UI to reflect the saved game state.
 
-* **TrivialQuestNative**: Demonstrates how to use the Events and Quests features of Google Play Game Services. The sample displays a sign-in button and four buttons to simulate killing monsters. Clicking a button generates an event, and sends it to Google Play Game Services to track what the player is doing in the game.
-
 * **minimalist**: Demonstrates a minimal use case for the Google Play Game Services API.
 
 * **TbmpSkeletonNative**: A trivial, turn-based multiplayer game.  Many players can play together in this thrilling game, in which they send a shared gamestate string back and forth until someone finishes or cancels, or the second-to-last player leaves. Be the last one standing!
