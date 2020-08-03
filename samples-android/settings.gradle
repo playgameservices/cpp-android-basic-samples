@@ -1,9 +1,7 @@
 include ':Common:gpg-sdk',
         ':Common:JuiHelper',
         ':Common:NDKHelper',
-        ':ButtonClicker',
         ':CollectAllTheStarsNative',
         ':Minimalist',
-        ':TbmpSkeletonNative',
         ':Teapot'
 

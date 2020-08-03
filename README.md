@@ -6,10 +6,6 @@ These samples illustrate how to use Google Play Game Services with your Android 
 
 * **minimalist**: Demonstrates a minimal use case for the Google Play Game Services API.
 
-* **TbmpSkeletonNative**: A trivial, turn-based multiplayer game.  Many players can play together in this thrilling game, in which they send a shared gamestate string back and forth until someone finishes or cancels, or the second-to-last player leaves. Be the last one standing!
-
-* **Button-Clicker**: Demonstrates real-time multiplayer using invites or quickmatch
-
 * **Teapots**: Demonstrates use of the Leaderboard and Achievement APIs.
 
 Pre-requisites
