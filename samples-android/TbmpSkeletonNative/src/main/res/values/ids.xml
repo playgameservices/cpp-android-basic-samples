@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-Google Play game services IDs.
-Save this file as res/values/games-ids.xml in your project.
--->
-<resources>
-  <string name="app_id">REPLACE_ME</string>
-</resources>
-
