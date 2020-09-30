@@ -16,6 +16,7 @@ Pre-requisites
    the sample, if any). In the Developer console, select a resource type
    (Achievements, Events, Leaderboards) and click "Get Resources".  Copy the
     contents from the console and replace the contents of res/values/ids.xml.
+## Installation process -
 
 Build with Android Studio
 -------------------------
@@ -56,23 +57,23 @@ Build using Gradle on OS X or Linux
 Build on Windows using Gradle
 -----------------------------
 1. Install Android Studio
-1. Set the path to the Android SDK
+2. Set the path to the Android SDK
 
     set ANDROID_HOME=C:\Users\<yourusername>\AppData\Local\Android\sdk
 
-1. Add the SDK to your path
+3. Add the SDK to your path
 
     set PATH=%PATH%;%ANDROID_HOME%\tools;%ANDROID_HOME%\platform-tools
 
-1. Set the path to the Android NDK
+4. Set the path to the Android NDK
 
     set ANDROID_NDK_HOME=C:\Users\<yourusername>\Desktop\android-ndk-r10e
 
-1. (Optional) On some versions of Windows it is helpful to map the samples folder to a shortened path.
+5. (Optional) On some versions of Windows it is helpful to map the samples folder to a shortened path.
 
     subst G: C:\<full-path-to-sample-folder>
 
-1. Execute the build script
+6. Execute the build script
 
     G:
     gradlew.bat assemble
